@@ -9,6 +9,7 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
+import Account from './pages/Account';  // Add this import
 import AddProduct from './pages/Admin/AddProduct';
 import EditProduct from './pages/Admin/EditProduct';
 import ManageProducts from './pages/Admin/ManageProducts';
@@ -20,12 +21,23 @@ function App() {
     <Router>
       <Layout>
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          
+          {/* Protected User Routes */}
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <Account />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/checkout"
             element={
@@ -42,6 +54,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+          
+          {/* Admin Routes */}
           <Route
             path="/admin"
             element={
@@ -73,14 +87,7 @@ function App() {
                 <EditProduct />
               </ProtectedRoute>
             }
-          /><Route
-  path="/admin/newsletter"
-  element={
-    <ProtectedRoute>
-      <NewsletterSubscribers />
-    </ProtectedRoute>
-  }
-/>
+          />
           <Route
             path="/admin/newsletter"
             element={
