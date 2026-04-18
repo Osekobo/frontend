@@ -6,10 +6,10 @@ import { checkout } from '../api/orders';
 import { initiatePayment } from '../api/mpesa';
 import { getDefaultAddress, createAddress } from '../api/address';
 import LocationPicker from '../components/Map/LocationPicker';
-import { 
-  FiMapPin, 
-  FiCheckCircle, 
-  FiNavigation, 
+import {
+  FiMapPin,
+  FiCheckCircle,
+  FiNavigation,
   FiSkipForward,
   FiAlertCircle,
   FiSmartphone,
@@ -126,13 +126,13 @@ const Checkout = () => {
     }
 
     setIsProcessing(true);
-    
+
     try {
       // Save address only if not skipped and location exists
       if (!skipAddress && selectedLocation) {
         await handleSaveAddress();
       }
-      
+
       // Create order
       const orderResponse = await checkout();
       const { order_id, total: orderTotal } = orderResponse.data;
@@ -140,7 +140,7 @@ const Checkout = () => {
       if (paymentMethod === 'mpesa') {
         // Initiate M-Pesa payment
         const paymentResponse = await initiatePayment(phone, grandTotal, order_id);
-        
+
         if (paymentResponse.data.ResponseCode === '0') {
           alert('Payment initiated! Please check your phone to complete payment.');
           navigate('/orders');
@@ -167,7 +167,7 @@ const Checkout = () => {
   return (
     <div className="container mx-auto max-w-6xl">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Checkout</h1>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column - Delivery Location */}
         <div className="lg:col-span-2 space-y-6">
@@ -188,7 +188,7 @@ const Checkout = () => {
                 </button>
               )}
             </div>
-            
+
             {skipAddress ? (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <div className="flex items-start space-x-3">
@@ -196,7 +196,7 @@ const Checkout = () => {
                   <div>
                     <p className="font-semibold text-gray-800">Address Skipped</p>
                     <p className="text-gray-600 text-sm">
-                      You can continue without providing a delivery address. 
+                      You can continue without providing a delivery address.
                       Our support team will contact you for delivery details.
                     </p>
                     <button
@@ -216,7 +216,7 @@ const Checkout = () => {
                 <p className="text-gray-600 text-sm mb-4">
                   Pin your exact delivery location on the map below:
                 </p>
-                <LocationPicker 
+                <LocationPicker
                   onLocationSelect={handleLocationSelect}
                   initialLocation={selectedLocation}
                 />
@@ -270,7 +270,7 @@ const Checkout = () => {
                     <input
                       type="text"
                       value={addressDetails.full_name}
-                      onChange={(e) => setAddressDetails({...addressDetails, full_name: e.target.value})}
+                      onChange={(e) => setAddressDetails({ ...addressDetails, full_name: e.target.value })}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       placeholder="Your full name"
                     />
@@ -297,7 +297,8 @@ const Checkout = () => {
                 <div className="flex space-x-3 justify-center">
                   <button
                     onClick={() => setShowMap(true)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    disabled={true}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
                   >
                     Add Address
                   </button>
@@ -316,13 +317,12 @@ const Checkout = () => {
           {/* Payment Methods Section */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Payment Methods</h2>
-            
+
             {/* Payment Method Options */}
             <div className="space-y-4 mb-6">
-              <div 
-                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                  paymentMethod === 'mpesa' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-green-300'
-                }`}
+              <div
+                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${paymentMethod === 'mpesa' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-green-300'
+                  }`}
                 onClick={() => setPaymentMethod('mpesa')}
               >
                 <div className="flex items-center justify-between">
@@ -337,10 +337,9 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <div 
-                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                  paymentMethod === 'card' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
-                }`}
+              <div
+                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${paymentMethod === 'card' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
+                  }`}
                 onClick={() => setPaymentMethod('card')}
               >
                 <div className="flex items-center justify-between">
@@ -355,10 +354,9 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <div 
-                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                  paymentMethod === 'cod' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-purple-300'
-                }`}
+              <div
+                className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-purple-300'
+                  }`}
                 onClick={() => setPaymentMethod('cod')}
               >
                 <div className="flex items-center justify-between">
@@ -388,7 +386,7 @@ const Checkout = () => {
                   <li>Enter your M-Pesa PIN to complete the transaction</li>
                   <li>Wait for confirmation and you'll be redirected</li>
                 </ol>
-                
+
                 <div className="mt-4">
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     M-Pesa Phone Number *
@@ -466,7 +464,7 @@ const Checkout = () => {
                   <p className="font-semibold text-gray-800">Cash on Delivery</p>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Pay in cash when your order arrives at your doorstep. 
+                  Pay in cash when your order arrives at your doorstep.
                   Please have the exact amount ready for the delivery person.
                 </p>
                 <div className="mt-3 bg-yellow-50 p-3 rounded-lg">
@@ -491,7 +489,7 @@ const Checkout = () => {
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow-md p-6 sticky top-20">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Order Summary</h2>
-            
+
             {/* Items List */}
             <div className="space-y-3 mb-4 max-h-64 overflow-y-auto border-b border-gray-200 pb-4">
               {items.map((item) => (
@@ -506,7 +504,7 @@ const Checkout = () => {
                 </div>
               ))}
             </div>
-            
+
             {/* Price Breakdown */}
             <div className="space-y-2 mb-4">
               <div className="flex justify-between text-sm">
@@ -530,7 +528,7 @@ const Checkout = () => {
                 </div>
               )}
             </div>
-            
+
             {/* Total */}
             <div className="border-t border-gray-200 pt-4 mb-4">
               <div className="flex justify-between text-lg font-bold">

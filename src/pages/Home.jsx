@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';  // Add this import
 import useProductStore from '../store/productStore';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
@@ -277,19 +278,21 @@ const Home = () => {
     }
   };
 
+  // Updated handleAddToCart with toast
   const handleAddToCart = async (product) => {
     if (!user) {
-      alert('Please login to add items to cart');
+      toast.error('Please login to add items to cart');
       return;
     }
     try {
       await addToCart(product.id);
       setAddedToCart({ [product.id]: true });
+      toast.success(`${product.name} added to cart!`);
       setTimeout(() => {
         setAddedToCart({});
       }, 2000);
     } catch (error) {
-      alert('Failed to add to cart');
+      toast.error('Failed to add to cart');
     }
   };
 
@@ -306,6 +309,31 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Add Toaster component for toast notifications */}
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#10B981',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#EF4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
 
       {/* 1. Hero Carousel Section */}
       <section className="relative overflow-hidden">
@@ -370,6 +398,7 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Rest of your sections remain exactly the same */}
       {/* 2. Why Choose Us Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">

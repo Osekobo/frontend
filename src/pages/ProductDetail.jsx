@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';  // Add this import
 import useProductStore from '../store/productStore';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
@@ -26,7 +27,6 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [addedToCart, setAddedToCart] = useState(false);
   const [inWishlist, setInWishlist] = useState(false);
 
   useEffect(() => {
@@ -47,27 +47,30 @@ const ProductDetail = () => {
 
   const handleAddToCart = async () => {
     if (!user) {
-      alert('Please login to add items to cart');
+      toast.error('Please login to add items to cart');
       navigate('/login');
       return;
     }
     try {
-      // Pass the quantity to addToCart
       await addToCart(product.id, quantity);
-      setAddedToCart(true);
-      setTimeout(() => setAddedToCart(false), 3000);
+      toast.success(`Added ${quantity} × ${product.name} to cart!`);
     } catch (error) {
-      alert('Failed to add to cart');
+      toast.error('Failed to add to cart');
     }
   };
 
   const toggleWishlist = () => {
     if (!user) {
-      alert('Please login to add to wishlist');
+      toast.error('Please login to add to wishlist');
       navigate('/login');
       return;
     }
     setInWishlist(!inWishlist);
+    if (!inWishlist) {
+      toast.success('Added to wishlist!');
+    } else {
+      toast.success('Removed from wishlist!');
+    }
   };
 
   if (!product) {
@@ -88,6 +91,32 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Add Toaster component here for toast notifications */}
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#10B981',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#EF4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+      
       <div className="container mx-auto px-4 py-8">
         {/* Back Button */}
         <button
@@ -223,12 +252,6 @@ const ProductDetail = () => {
                     <span>Share on WhatsApp</span>
                   </button>
                 </div>
-
-                {addedToCart && (
-                  <div className="mb-6 p-3 bg-green-100 text-green-700 rounded-lg text-center animate-bounce">
-                    Product added to cart successfully!
-                  </div>
-                )}
 
                 {/* Shipping Info */}
                 <div className="border-t border-gray-200 pt-6 space-y-3">
