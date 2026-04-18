@@ -23,7 +23,7 @@ const LocationPicker = ({ onLocationSelect, initialLocation }) => {
     }
 
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&libraries=places&callback=initMap`;
+    // script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&libraries=places&callback=initMap`;
     script.async = true;
     script.defer = true;
     

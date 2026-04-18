@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import useProductStore from '../store/productStore';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
-import { 
-  FiShoppingCart, 
-  FiStar, 
-  FiTruck, 
-  FiShield, 
-  FiRefreshCw, 
+import {
+  FiShoppingCart,
+  FiStar,
+  FiTruck,
+  FiShield,
+  FiRefreshCw,
   FiChevronRight,
   FiChevronLeft,
   FiHeart,
@@ -25,7 +25,7 @@ const Home = () => {
   const { products, isLoading, fetchProducts } = useProductStore();
   const { addToCart } = useCartStore();
   const { user } = useAuthStore();
-  
+
   // State for carousels
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -305,17 +305,16 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
+
       {/* 1. Hero Carousel Section */}
       <section className="relative overflow-hidden">
         <div className="relative h-[500px] md:h-[600px] overflow-hidden">
           {heroSlides.map((slide, index) => (
             <div
               key={slide.id}
-              className={`absolute inset-0 transition-transform duration-700 ease-in-out transform ${
-                index === currentSlide ? 'translate-x-0' : 'translate-x-full'
-              } ${index < currentSlide ? '-translate-x-full' : ''}`}
-              style={{ 
+              className={`absolute inset-0 transition-transform duration-700 ease-in-out transform ${index === currentSlide ? 'translate-x-0' : 'translate-x-full'
+                } ${index < currentSlide ? '-translate-x-full' : ''}`}
+              style={{
                 backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%), url(${slide.image})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
@@ -343,7 +342,7 @@ const Home = () => {
               </div>
             </div>
           ))}
-          
+
           <button
             onClick={prevSlide}
             className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-2 rounded-full transition-all"
@@ -356,15 +355,14 @@ const Home = () => {
           >
             <FiChevronRight className="w-6 h-6" />
           </button>
-          
+
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2">
             {heroSlides.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  index === currentSlide ? 'w-8 bg-white' : 'bg-white/50'
-                }`}
+                className={`w-2 h-2 rounded-full transition-all ${index === currentSlide ? 'w-8 bg-white' : 'bg-white/50'
+                  }`}
               />
             ))}
           </div>
@@ -455,10 +453,9 @@ const Home = () => {
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  
-                  <div className={`absolute inset-0 bg-black/50 flex items-center justify-center space-x-3 transition-opacity duration-300 ${
-                    hoveredProduct === product.id ? 'opacity-100' : 'opacity-0'
-                  }`}>
+
+                  <div className={`absolute inset-0 bg-black/50 flex items-center justify-center space-x-3 transition-opacity duration-300 ${hoveredProduct === product.id ? 'opacity-100' : 'opacity-0'
+                    }`}>
                     <button
                       onClick={() => handleAddToCart(product)}
                       className="p-2 bg-white rounded-full hover:bg-blue-600 hover:text-white transition-colors"
@@ -478,12 +475,12 @@ const Home = () => {
                       Low Stock
                     </div>
                   )}
-                  
+
                   <div className="absolute top-4 right-4 bg-blue-500 text-white px-2 py-1 rounded-md text-xs font-semibold">
                     New
                   </div>
                 </div>
-                
+
                 <div className="p-4">
                   <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-1">
                     {product.name}
@@ -503,14 +500,13 @@ const Home = () => {
                       </span>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center mt-2">
                     {[...Array(5)].map((_, i) => (
                       <FiStar
                         key={i}
-                        className={`w-4 h-4 ${
-                          i < 4 ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                        }`}
+                        className={`w-4 h-4 ${i < 4 ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                          }`}
                       />
                     ))}
                     <span className="ml-2 text-sm text-gray-600">(24 reviews)</span>
@@ -535,7 +531,7 @@ const Home = () => {
           <div className="max-w-4xl mx-auto">
             <div className="relative bg-white rounded-2xl shadow-xl p-8 md:p-12">
               <div className="absolute top-4 left-4 text-6xl text-blue-100">"</div>
-              
+
               <div className="flex justify-center mb-6">
                 {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
                   <FiStar key={i} className="w-6 h-6 text-yellow-400 fill-current" />
@@ -581,9 +577,8 @@ const Home = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      index === currentTestimonial ? 'w-8 bg-blue-600' : 'bg-gray-300'
-                    }`}
+                    className={`w-2 h-2 rounded-full transition-all ${index === currentTestimonial ? 'w-8 bg-blue-600' : 'bg-gray-300'
+                      }`}
                   />
                 ))}
               </div>
@@ -634,7 +629,7 @@ const Home = () => {
                       className="max-h-12 object-contain group-hover:scale-110 transition-transform duration-300"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = `https://via.placeholder.com/100x60?text=${partner.name}`;
+                        e.target.src = `https://placehold.co/100x60?text=${partner.name}`;
                       }}
                     />
                   </div>
