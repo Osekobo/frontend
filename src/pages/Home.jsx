@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import useProductStore from '../store/productStore';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
+import { FaWhatsapp } from 'react-icons/fa';
 import {
   FiShoppingCart,
   FiStar,
@@ -718,6 +719,23 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* 9. WhatsApp Floating Button */}
+      <div className="fixed bottom-6 left-6 z-50 group">
+        <a
+          href="https://wa.me/254714391137?text=Hello%21%20I%20have%20a%20question%20about%20your%20products"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center w-14 h-14 bg-green-500 rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 hover:scale-110"
+        >
+          <FaWhatsapp className="w-7 h-7 text-white" />
+        </a>
+        
+        {/* Tooltip that appears on hover */}
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+          Chat with us on WhatsApp
+        </div>
+      </div>
     </div>
   );
 };
