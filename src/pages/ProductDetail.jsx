@@ -146,9 +146,7 @@ const ProductDetail = () => {
                     <span className="ml-2 text-gray-600">(124 reviews)</span>
                   </div>
                   <div className="text-gray-400">|</div>
-                  <div className="text-green-600 font-semibold">
-                    {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-                  </div>
+                  {/* Stock display removed - no longer showing "X in stock" */}
                 </div>
 
                 <div className="mb-4">
@@ -205,8 +203,8 @@ const ProductDetail = () => {
                   <button
                     onClick={toggleWishlist}
                     className={`px-6 py-3 rounded-lg font-semibold border-2 transition-colors flex items-center justify-center space-x-2 ${inWishlist
-                        ? 'bg-red-50 border-red-500 text-red-600'
-                        : 'border-gray-300 hover:border-red-500 hover:text-red-600'
+                      ? 'bg-red-50 border-red-500 text-red-600'
+                      : 'border-gray-300 hover:border-red-500 hover:text-red-600'
                       }`}
                   >
                     <FiHeart className={`w-5 h-5 ${inWishlist ? 'fill-current' : ''}`} />
