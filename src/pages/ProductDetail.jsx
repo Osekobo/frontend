@@ -210,9 +210,17 @@ const ProductDetail = () => {
                     <FiHeart className={`w-5 h-5 ${inWishlist ? 'fill-current' : ''}`} />
                     <span>{inWishlist ? 'In Wishlist' : 'Add to Wishlist'}</span>
                   </button>
-                  <button className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 hover:border-blue-600 hover:text-blue-600 transition-colors flex items-center justify-center space-x-2">
+                  <button
+                    onClick={() => {
+                      const productUrl = window.location.href;
+                      const shareText = `Check out this product: ${product.name}!\n\nPrice: KSh ${product.price.toLocaleString()}\n\n${productUrl}`;
+                      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+                      window.open(whatsappUrl, '_blank');
+                    }}
+                    className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 hover:border-green-600 hover:text-green-600 transition-colors flex items-center justify-center space-x-2"
+                  >
                     <FiShare2 className="w-5 h-5" />
-                    <span>Share</span>
+                    <span>Share on WhatsApp</span>
                   </button>
                 </div>
 
