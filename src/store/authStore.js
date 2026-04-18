@@ -79,10 +79,19 @@ const useAuthStore = create(
         localStorage.removeItem('access_token');
         set({ user: null, token: null, error: null });
       },
+      
+      // Add this function to manually clear error
+      clearError: () => set({ error: null }),
     }),
     {
       name: 'auth-storage',
       getStorage: () => localStorage,
+      // This is the key fix - only persist user and token, NOT error
+      partialize: (state) => ({ 
+        user: state.user, 
+        token: state.token 
+        // error is intentionally omitted here
+      }),
     }
   )
 );
