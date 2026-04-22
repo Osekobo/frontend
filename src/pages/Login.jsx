@@ -1,12 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';  // ✅ Add useEffect
 import { useNavigate, Link } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, error, clearError } = useAuthStore();  // ✅ Add clearError
   const navigate = useNavigate();
+
+  // ✅ Clear any stale errors when login page loads
+  useEffect(() => {
+    clearError();
+  }, [clearError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

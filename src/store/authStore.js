@@ -22,10 +22,14 @@ const useAuthStore = create(
           localStorage.setItem('access_token', access_token);
           return { success: true };
         } catch (error) {
-          // Extract meaningful error message
+          console.error('Login error details:', error);
           let errorMessage = 'Login failed';
           
           if (error.response) {
+            // Log the full error response for debugging
+            console.error('Error response data:', error.response.data);
+            console.error('Error status:', error.response.status);
+            
             const data = error.response.data;
             if (typeof data === 'string') {
               errorMessage = data;
@@ -48,24 +52,60 @@ const useAuthStore = create(
       register: async (userData) => {
         set({ isLoading: true, error: null });
         try {
-          await registerApi(userData);
-          set({ isLoading: false });
-          return { success: true };
+          console.log('Sending registration data:', userData);
+          
+          // First, register the user
+          const registerResponse = await registerApi(userData);
+          console.log('Registration response:', registerResponse);
+          
+          // After successful registration, automatically log them in
+          const loginResponse = await loginApi({ 
+            email: userData.email, 
+            password: userData.password 
+          });
+          
+          const { access_token } = loginResponse.data;
+          const user = jwtDecode(access_token);
+          
+          set({ 
+            token: access_token, 
+            user, 
+            isLoading: false,
+            error: null
+          });
+          localStorage.setItem('access_token', access_token);
+          
+          return { success: true, user };
+          
         } catch (error) {
-          // Extract meaningful error message
+          console.error('Registration error details:', error);
+          
           let errorMessage = 'Registration failed';
           
           if (error.response) {
+            // Log the full error response for debugging
+            console.error('Error response data:', error.response.data);
+            console.error('Error status:', error.response.status);
+            console.error('Error headers:', error.response.headers);
+            
             const data = error.response.data;
+            
+            // Try to extract the most helpful error message
             if (typeof data === 'string') {
               errorMessage = data;
             } else if (data.detail) {
               errorMessage = data.detail;
             } else if (data.message) {
               errorMessage = data.message;
+            } else if (data.errors && Array.isArray(data.errors)) {
+              errorMessage = data.errors.map(e => e.msg || e).join(', ');
             } else {
               errorMessage = JSON.stringify(data);
             }
+          } else if (error.request) {
+            // Request was made but no response received
+            errorMessage = 'No response from server. Please check your connection.';
+            console.error('No response received:', error.request);
           } else if (error.message) {
             errorMessage = error.message;
           }
@@ -80,17 +120,14 @@ const useAuthStore = create(
         set({ user: null, token: null, error: null });
       },
       
-      // Add this function to manually clear error
       clearError: () => set({ error: null }),
     }),
     {
       name: 'auth-storage',
       getStorage: () => localStorage,
-      // This is the key fix - only persist user and token, NOT error
       partialize: (state) => ({ 
         user: state.user, 
         token: state.token 
-        // error is intentionally omitted here
       }),
     }
   )
