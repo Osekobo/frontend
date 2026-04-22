@@ -8,6 +8,43 @@
   }
 }
 
+@layer components {
+  /* Navbar component styles */
+  .nav-link {
+    @apply text-gray-700 hover:text-blue-600 transition-colors duration-200;
+  }
+  
+  .nav-link-active {
+    @apply text-blue-600 font-semibold;
+  }
+  
+  .mobile-nav-item {
+    @apply flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors;
+  }
+  
+  .mobile-nav-item-danger {
+    @apply flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors;
+  }
+  
+  /* Sidebar menu animation */
+  .sidebar-enter {
+    @apply transform transition-transform duration-300 ease-out;
+  }
+  
+  .sidebar-enter-active {
+    @apply translate-x-0;
+  }
+  
+  .sidebar-exit {
+    @apply translate-x-full;
+  }
+  
+  /* Cart badge */
+  .cart-badge {
+    @apply absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center;
+  }
+}
+
 @layer utilities {
   .line-clamp-2 {
     display: -webkit-box;
@@ -15,46 +52,14 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  
+  /* Prevent body scroll when mobile menu is open */
+  .body-no-scroll {
+    @apply overflow-hidden;
   }
 }
 
-.animate-fade-in {
-  animation: fade-in 0.8s ease-out;
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
+/* Your existing animations and styles remain */
 @keyframes fade-in {
   from {
     opacity: 0;
