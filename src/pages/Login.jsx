@@ -24,15 +24,15 @@ const Login = () => {
   // Helper function to format error messages
   const formatErrorMessage = (error) => {
     if (!error) return null;
-    
+
     // If it's a string, return it directly
     if (typeof error === 'string') return error;
-    
+
     // If it's an array of errors (FastAPI validation errors)
     if (Array.isArray(error)) {
       return error.map(err => err.msg || JSON.stringify(err)).join(', ');
     }
-    
+
     // If it's an object with detail (FastAPI standard error)
     if (error.detail) {
       if (Array.isArray(error.detail)) {
@@ -40,10 +40,10 @@ const Login = () => {
       }
       return error.detail;
     }
-    
+
     // If it's an object with message
     if (error.message) return error.message;
-    
+
     // Default fallback
     return 'An error occurred. Please try again.';
   };
@@ -53,7 +53,7 @@ const Login = () => {
   return (
     <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
-      
+
       {errorMessage && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           {errorMessage}
@@ -100,6 +100,11 @@ const Login = () => {
         Don't have an account?{' '}
         <Link to="/register" className="text-blue-600 hover:text-blue-700">
           Register
+        </Link>
+      </p>
+      <p className="text-center text-gray-600 mt-4">
+        <Link to="/forgot-password" className="text-blue-600 hover:text-blue-700 text-sm">
+          Forgot password?
         </Link>
       </p>
     </div>
