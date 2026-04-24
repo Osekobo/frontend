@@ -37,15 +37,15 @@ const Products = () => {
   
   const itemsPerPage = 12;
 
-  // Categories (would come from backend in production)
+  // Categories
   const categories = [
     { id: 'all', name: 'All Products', icon: '📦' },
-    { id: 'electronics', name: 'Electronics', icon: '💻' },
-    { id: 'fashion', name: 'Fashion', icon: '👕' },
-    { id: 'home', name: 'Home & Living', icon: '🏠' },
-    { id: 'sports', name: 'Sports', icon: '⚽' },
-    { id: 'books', name: 'Books', icon: '📚' },
-    { id: 'toys', name: 'Toys', icon: '🎮' }
+    { id: 'building', name: 'Building Materials', icon: '🧱' },
+    { id: 'paints', name: 'Paints', icon: '🎨' },
+    { id: 'hardware', name: 'Hardware Tools', icon: '🔧' },
+    { id: 'plumbing', name: 'Plumbing', icon: '🚰' },
+    { id: 'electrical', name: 'Electrical', icon: '⚡' },
+    { id: 'general', name: 'General Store', icon: '🏪' }
   ];
 
   // Price ranges for filtering
@@ -73,34 +73,22 @@ const Products = () => {
 
   // Filter and sort products
   const filteredProducts = products.filter(product => {
-    // Search filter
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    // Category filter (mock - in production, products would have category field)
-    const matchesCategory = selectedCategory === 'all' || true; // Implement actual category filtering
-    
-    // Price filter
+                         product.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'all' || true;
     const matchesPrice = product.price >= priceRange.min && product.price <= priceRange.max;
-    
     return matchesSearch && matchesCategory && matchesPrice;
   });
 
   // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch(sortBy) {
-      case 'price-asc':
-        return a.price - b.price;
-      case 'price-desc':
-        return b.price - a.price;
-      case 'name-asc':
-        return a.name.localeCompare(b.name);
-      case 'name-desc':
-        return b.name.localeCompare(a.name);
-      case 'rating':
-        return (b.rating || 0) - (a.rating || 0);
-      default:
-        return 0;
+      case 'price-asc': return a.price - b.price;
+      case 'price-desc': return b.price - a.price;
+      case 'name-asc': return a.name.localeCompare(b.name);
+      case 'name-desc': return b.name.localeCompare(a.name);
+      case 'rating': return (b.rating || 0) - (a.rating || 0);
+      default: return 0;
     }
   });
 
@@ -148,15 +136,16 @@ const Products = () => {
   // Loading skeleton
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-warm">
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {/* Changed from 1 to 2 columns on mobile */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden">
-                  <div className="h-64 bg-gray-200"></div>
-                  <div className="p-4">
+                <div key={i} className="bg-white border-4 border-black shadow-hard-sm overflow-hidden">
+                  <div className="h-48 sm:h-56 md:h-64 bg-gray-200"></div>
+                  <div className="p-3 sm:p-4">
                     <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2 mb-3"></div>
                     <div className="h-6 bg-gray-200 rounded w-1/3"></div>
@@ -171,39 +160,39 @@ const Products = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-warm">
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12">
+      <div className="bg-terra text-white py-12 border-b-8 border-black">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Products</h1>
-          <p className="text-xl opacity-90">Discover amazing products at great prices</p>
+          <h1 className="font-h text-3xl sm:text-4xl md:text-5xl font-bold uppercase mb-4">Our Products</h1>
+          <p className="text-base sm:text-xl opacity-90">Quality building materials and hardware at great prices</p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 sm:py-8">
         {/* Mobile Filter Button */}
-        <div className="lg:hidden mb-6">
+        <div className="lg:hidden mb-4 sm:mb-6">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="w-full bg-white px-4 py-3 rounded-lg shadow-md flex items-center justify-between"
+            className="w-full bg-white border-4 border-black px-4 py-3 shadow-hard-sm flex items-center justify-between"
           >
             <div className="flex items-center space-x-2">
-              <FiSliders className="w-5 h-5" />
+              <FiSliders className="w-5 h-5 text-terra" />
               <span className="font-semibold">Filters & Sort</span>
             </div>
             <FiChevronDown className={`w-5 h-5 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Sidebar Filters */}
           <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-20">
+            <div className="bg-white border-4 border-black shadow-hard-sm p-4 sm:p-6 sticky top-20">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-gray-800">Filters</h2>
+                <h2 className="font-h text-xl font-bold text-black uppercase">Filters</h2>
                 <button
                   onClick={clearFilters}
-                  className="text-sm text-blue-600 hover:text-blue-700"
+                  className="text-sm text-terra hover:text-terra-dark font-semibold"
                 >
                   Clear All
                 </button>
@@ -211,24 +200,24 @@ const Products = () => {
 
               {/* Search */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-black mb-2">
                   Search Products
                 </label>
                 <div className="relative">
-                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-ash" />
                   <input
                     type="text"
-                    placeholder="Search by name or description..."
+                    placeholder="Search..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-10 pr-4 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
                   />
                 </div>
               </div>
 
               {/* Categories */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <label className="block text-sm font-semibold text-black mb-3">
                   Categories
                 </label>
                 <div className="space-y-2">
@@ -236,10 +225,10 @@ const Products = () => {
                     <button
                       key={category.id}
                       onClick={() => setSelectedCategory(category.id)}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center space-x-2 ${
+                      className={`w-full text-left px-3 py-2 border-2 transition-colors flex items-center space-x-2 ${
                         selectedCategory === category.id
-                          ? 'bg-blue-50 text-blue-600'
-                          : 'hover:bg-gray-50'
+                          ? 'bg-terra text-white border-terra'
+                          : 'border-transparent hover:border-terra hover:bg-terra/10'
                       }`}
                     >
                       <span>{category.icon}</span>
@@ -251,7 +240,7 @@ const Products = () => {
 
               {/* Price Range */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <label className="block text-sm font-semibold text-black mb-3">
                   Price Range
                 </label>
                 <div className="space-y-2">
@@ -259,10 +248,10 @@ const Products = () => {
                     <button
                       key={index}
                       onClick={() => setPriceRange({ min: range.min, max: range.max })}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                      className={`w-full text-left px-3 py-2 border-2 transition-colors ${
                         priceRange.min === range.min && priceRange.max === range.max
-                          ? 'bg-blue-50 text-blue-600'
-                          : 'hover:bg-gray-50'
+                          ? 'bg-terra text-white border-terra'
+                          : 'border-transparent hover:border-terra hover:bg-terra/10'
                       }`}
                     >
                       {range.label}
@@ -278,14 +267,14 @@ const Products = () => {
                       placeholder="Min"
                       value={priceRange.min}
                       onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
-                      className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-1/2 px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
                     />
                     <input
                       type="number"
                       placeholder="Max"
                       value={priceRange.max}
                       onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-                      className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-1/2 px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
                     />
                   </div>
                 </div>
@@ -293,13 +282,13 @@ const Products = () => {
 
               {/* Active Filters */}
               {(searchTerm || selectedCategory !== 'all' || priceRange.min > 0 || priceRange.max < 100000) && (
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3">Active Filters</h3>
+                <div className="mt-6 pt-6 border-t-2 border-black">
+                  <h3 className="text-sm font-semibold text-black mb-3">Active Filters</h3>
                   <div className="flex flex-wrap gap-2">
                     {searchTerm && (
                       <button
                         onClick={() => setSearchTerm('')}
-                        className="inline-flex items-center space-x-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-sm"
+                        className="inline-flex items-center space-x-1 px-2 py-1 bg-terra/10 text-terra border border-terra text-sm"
                       >
                         <span>Search: {searchTerm}</span>
                         <FiX className="w-3 h-3" />
@@ -308,7 +297,7 @@ const Products = () => {
                     {selectedCategory !== 'all' && (
                       <button
                         onClick={() => setSelectedCategory('all')}
-                        className="inline-flex items-center space-x-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-sm"
+                        className="inline-flex items-center space-x-1 px-2 py-1 bg-terra/10 text-terra border border-terra text-sm"
                       >
                         <span>Category: {selectedCategory}</span>
                         <FiX className="w-3 h-3" />
@@ -317,7 +306,7 @@ const Products = () => {
                     {(priceRange.min > 0 || priceRange.max < 100000) && (
                       <button
                         onClick={() => setPriceRange({ min: 0, max: 100000 })}
-                        className="inline-flex items-center space-x-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-md text-sm"
+                        className="inline-flex items-center space-x-1 px-2 py-1 bg-terra/10 text-terra border border-terra text-sm"
                       >
                         <span>Price: KSh {priceRange.min} - {priceRange.max}</span>
                         <FiX className="w-3 h-3" />
@@ -332,9 +321,9 @@ const Products = () => {
           {/* Products Grid */}
           <div className="flex-1">
             {/* Toolbar */}
-            <div className="bg-white rounded-xl shadow-md p-4 mb-6">
+            <div className="bg-white border-4 border-black shadow-hard-sm p-4 mb-6">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div className="text-gray-600">
+                <div className="text-ash font-semibold text-sm sm:text-base">
                   Showing {startIndex + 1} - {Math.min(startIndex + itemsPerPage, sortedProducts.length)} of {sortedProducts.length} products
                 </div>
                 
@@ -343,7 +332,7 @@ const Products = () => {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="px-3 sm:px-4 py-2 text-sm sm:text-base border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
                   >
                     {sortOptions.map(option => (
                       <option key={option.value} value={option.value}>
@@ -353,11 +342,11 @@ const Products = () => {
                   </select>
 
                   {/* View Toggle */}
-                  <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+                  <div className="flex border-2 border-black overflow-hidden">
                     <button
                       onClick={() => setViewMode('grid')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'grid' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
+                        viewMode === 'grid' ? 'bg-terra text-white' : 'hover:bg-terra/10'
                       }`}
                     >
                       <FiGrid className="w-5 h-5" />
@@ -365,7 +354,7 @@ const Products = () => {
                     <button
                       onClick={() => setViewMode('list')}
                       className={`p-2 transition-colors ${
-                        viewMode === 'list' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'
+                        viewMode === 'list' ? 'bg-terra text-white' : 'hover:bg-terra/10'
                       }`}
                     >
                       <FiList className="w-5 h-5" />
@@ -377,108 +366,133 @@ const Products = () => {
 
             {/* No Results */}
             {paginatedProducts.length === 0 && (
-              <div className="bg-white rounded-xl shadow-md p-12 text-center">
+              <div className="bg-white border-4 border-black shadow-hard-sm p-8 sm:p-12 text-center">
                 <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">No products found</h3>
-                <p className="text-gray-600 mb-4">Try adjusting your filters or search terms</p>
+                <h3 className="font-h text-xl font-bold text-black mb-2">No products found</h3>
+                <p className="text-ash mb-4">Try adjusting your filters or search terms</p>
                 <button
                   onClick={clearFilters}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="px-6 py-2 bg-terra text-white border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                   Clear All Filters
                 </button>
               </div>
             )}
 
-            {/* Products Display */}
+            {/* Products Display - Grid View - UPDATED for mobile */}
             {viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                 {paginatedProducts.map((product) => (
                   <div
                     key={product.id}
-                    className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+                    className="group bg-white border-4 border-black shadow-hard-sm overflow-hidden hover:-translate-y-2 transition-all duration-300"
                     onMouseEnter={() => setHoveredProduct(product.id)}
                     onMouseLeave={() => setHoveredProduct(null)}
                   >
-                    <div className="relative overflow-hidden h-64">
+                    <div className="relative overflow-hidden aspect-square border-b-4 border-black">
                       <img
-                        src={product.image_url || `https://picsum.photos/seed/${product.id}/400/400`}
+                        src={product.image_url || `https://placehold.co/400x400/D6B896/121518?text=${product.name.substring(0, 15)}`}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       
-                      {/* Overlay Actions */}
-                      <div className={`absolute inset-0 bg-black/50 flex items-center justify-center space-x-3 transition-opacity duration-300 ${
-                        hoveredProduct === product.id ? 'opacity-100' : 'opacity-0'
-                      }`}>
+                      {/* Overlay Actions - Hidden on mobile, visible on hover for desktop */}
+                      <div className={`absolute inset-0 bg-black/60 items-center justify-center space-x-3 transition-opacity duration-300 
+                        ${hoveredProduct === product.id ? 'md:flex' : 'md:hidden'} hidden`}>
                         <button
                           onClick={() => handleAddToCart(product)}
-                          className="p-2 bg-white rounded-full hover:bg-blue-600 hover:text-white transition-colors"
+                          className="p-2 bg-terra text-white border-2 border-black hover:bg-terra-dark transition-colors"
                         >
                           <FiShoppingCart className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => toggleWishlist(product.id)}
-                          className={`p-2 rounded-full transition-colors ${
+                          className={`p-2 border-2 transition-colors ${
                             wishlist.includes(product.id)
-                              ? 'bg-red-500 text-white'
-                              : 'bg-white hover:bg-red-500 hover:text-white'
+                              ? 'bg-terra text-white border-terra'
+                              : 'bg-white text-terra border-black hover:bg-terra hover:text-white'
                           }`}
                         >
                           <FiHeart className="w-5 h-5" />
                         </button>
                         <Link
                           to={`/product/${product.id}`}
-                          className="p-2 bg-white rounded-full hover:bg-blue-600 hover:text-white transition-colors"
+                          className="p-2 bg-terra text-white border-2 border-black hover:bg-terra-dark transition-colors"
                         >
                           <FiEye className="w-5 h-5" />
                         </Link>
                       </div>
 
+                      {/* Mobile touch actions - visible on mobile */}
+                      <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-2 md:hidden">
+                        <button
+                          onClick={() => handleAddToCart(product)}
+                          className="p-2 bg-terra text-white border-2 border-black text-xs"
+                        >
+                          <FiShoppingCart className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => toggleWishlist(product.id)}
+                          className={`p-2 border-2 text-xs ${
+                            wishlist.includes(product.id)
+                              ? 'bg-terra text-white border-terra'
+                              : 'bg-white text-terra border-black'
+                          }`}
+                        >
+                          <FiHeart className="w-4 h-4" />
+                        </button>
+                        <Link
+                          to={`/product/${product.id}`}
+                          className="p-2 bg-terra text-white border-2 border-black text-xs"
+                        >
+                          <FiEye className="w-4 h-4" />
+                        </Link>
+                      </div>
+
                       {/* Badges */}
                       {product.stock < 10 && product.stock > 0 && (
-                        <div className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-semibold">
+                        <div className="absolute top-2 left-2 bg-terra text-white px-1.5 py-0.5 text-[10px] sm:text-xs font-bold uppercase border border-black">
                           Low Stock
                         </div>
                       )}
                       {wishlist.includes(product.id) && (
-                        <div className="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-semibold">
+                        <div className="absolute top-2 right-2 bg-terra text-white px-1.5 py-0.5 text-[10px] sm:text-xs font-bold uppercase border border-black">
                           Wishlist
                         </div>
                       )}
                     </div>
                     
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-1">
+                    <div className="p-2 sm:p-3 md:p-4">
+                      <h3 className="font-h font-bold text-sm sm:text-base md:text-lg text-black mb-1 line-clamp-1">
                         {product.name}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                      <p className="text-ash text-xs sm:text-sm mb-2 line-clamp-2 hidden sm:block">
                         {product.description}
                       </p>
                       <div className="flex justify-between items-center">
                         <div>
-                          <span className="text-2xl font-bold text-blue-600">
+                          <span className="font-h font-bold text-sm sm:text-base md:text-2xl text-terra">
                             KSh {product.price.toLocaleString()}
                           </span>
                         </div>
                         {addedToCart[product.id] && (
-                          <span className="text-green-600 text-sm font-semibold animate-bounce">
+                          <span className="text-green-600 text-xs sm:text-sm font-semibold animate-bounce">
                             Added!
                           </span>
                         )}
                       </div>
                       
                       {/* Rating */}
-                      <div className="flex items-center mt-2">
+                      <div className="flex items-center mt-1 sm:mt-2">
                         {[...Array(5)].map((_, i) => (
                           <FiStar
                             key={i}
-                            className={`w-4 h-4 ${
-                              i < 4 ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                            className={`w-3 h-3 sm:w-4 sm:h-4 ${
+                              i < 4 ? 'text-yellow-500 fill-current' : 'text-gray-300'
                             }`}
                           />
                         ))}
-                        <span className="ml-2 text-sm text-gray-600">(24 reviews)</span>
+                        <span className="ml-1 sm:ml-2 text-xs sm:text-sm text-ash">(24)</span>
                       </div>
                     </div>
                   </div>
@@ -490,57 +504,57 @@ const Products = () => {
                 {paginatedProducts.map((product) => (
                   <div
                     key={product.id}
-                    className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                    className="bg-white border-4 border-black shadow-hard-sm overflow-hidden hover:shadow-hard transition-shadow"
                   >
                     <div className="flex flex-col sm:flex-row">
-                      <div className="sm:w-48 h-48 relative overflow-hidden">
+                      <div className="sm:w-48 h-48 relative overflow-hidden border-b-4 sm:border-b-0 sm:border-r-4 border-black">
                         <img
-                          src={product.image_url || `https://picsum.photos/seed/${product.id}/200/200`}
+                          src={product.image_url || `https://placehold.co/200x200/D6B896/121518?text=${product.name.substring(0, 10)}`}
                           alt={product.name}
                           className="w-full h-full object-cover"
                         />
                         {product.stock < 10 && product.stock > 0 && (
-                          <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-semibold">
+                          <div className="absolute top-2 left-2 bg-terra text-white px-2 py-1 text-xs font-bold uppercase border border-black">
                             Low Stock
                           </div>
                         )}
                       </div>
                       <div className="flex-1 p-6">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                        <div className="flex justify-between items-start flex-wrap gap-4">
+                          <div className="flex-1">
+                            <h3 className="font-h text-xl font-bold text-black mb-2">
                               {product.name}
                             </h3>
-                            <p className="text-gray-600 mb-4">{product.description}</p>
+                            <p className="text-ash mb-4">{product.description}</p>
                             <div className="flex items-center mb-4">
                               {[...Array(5)].map((_, i) => (
                                 <FiStar
                                   key={i}
                                   className={`w-4 h-4 ${
-                                    i < 4 ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                                    i < 4 ? 'text-yellow-500 fill-current' : 'text-gray-300'
                                   }`}
                                 />
                               ))}
-                              <span className="ml-2 text-sm text-gray-600">(24 reviews)</span>
+                              <span className="ml-2 text-sm text-ash">(24 reviews)</span>
                             </div>
-                            <div className="text-2xl font-bold text-blue-600">
+                            <div className="font-h text-2xl font-bold text-terra">
                               KSh {product.price.toLocaleString()}
                             </div>
                           </div>
                           <div className="flex flex-col space-y-2">
                             <button
                               onClick={() => handleAddToCart(product)}
-                              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                              className="px-6 py-2 bg-terra text-white border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center space-x-2"
                             >
                               <FiShoppingCart className="w-5 h-5" />
                               <span>Add to Cart</span>
                             </button>
                             <button
                               onClick={() => toggleWishlist(product.id)}
-                              className={`px-6 py-2 border rounded-lg transition-colors flex items-center space-x-2 ${
+                              className={`px-6 py-2 border-4 transition-colors flex items-center space-x-2 ${
                                 wishlist.includes(product.id)
-                                  ? 'bg-red-50 border-red-500 text-red-600'
-                                  : 'border-gray-300 hover:border-red-500 hover:text-red-600'
+                                  ? 'bg-terra text-white border-terra'
+                                  : 'border-black hover:bg-terra hover:text-white'
                               }`}
                             >
                               <FiHeart className={`w-5 h-5 ${wishlist.includes(product.id) ? 'fill-current' : ''}`} />
@@ -558,18 +572,17 @@ const Products = () => {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="mt-8 flex justify-center">
-                <div className="flex space-x-2">
+                <div className="flex space-x-1 sm:space-x-2">
                   <button
                     onClick={() => setCurrentPage(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 sm:px-4 py-2 border-4 border-black hover:bg-terra/10 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <FiChevronLeft className="w-5 h-5" />
                   </button>
                   
                   {[...Array(totalPages)].map((_, i) => {
                     const pageNumber = i + 1;
-                    // Show first page, last page, and pages around current page
                     if (
                       pageNumber === 1 ||
                       pageNumber === totalPages ||
@@ -579,17 +592,17 @@ const Products = () => {
                         <button
                           key={pageNumber}
                           onClick={() => setCurrentPage(pageNumber)}
-                          className={`px-4 py-2 rounded-lg transition-colors ${
+                          className={`px-3 sm:px-4 py-2 border-4 transition-colors ${
                             currentPage === pageNumber
-                              ? 'bg-blue-600 text-white'
-                              : 'border border-gray-300 hover:bg-gray-50'
+                              ? 'bg-terra text-white border-terra'
+                              : 'border-black hover:bg-terra/10'
                           }`}
                         >
                           {pageNumber}
                         </button>
                       );
                     } else if (pageNumber === currentPage - 2 || pageNumber === currentPage + 2) {
-                      return <span key={pageNumber} className="px-2 py-2">...</span>;
+                      return <span key={pageNumber} className="px-2 py-2 text-black">...</span>;
                     }
                     return null;
                   })}
@@ -597,7 +610,7 @@ const Products = () => {
                   <button
                     onClick={() => setCurrentPage(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 sm:px-4 py-2 border-4 border-black hover:bg-terra/10 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <FiChevronRight className="w-5 h-5" />
                   </button>

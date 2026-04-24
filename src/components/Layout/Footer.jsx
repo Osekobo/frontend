@@ -88,73 +88,73 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-black text-white border-t-8 border-terra">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
 
           {/* Company Info */}
           <div>
-            <Link to="/" className="text-2xl font-bold text-blue-400 mb-4 inline-block">
-              ShopHub
+            <Link to="/" className="font-h text-2xl font-bold text-terra mb-4 inline-block">
+              Kione Hardware
             </Link>
-            <p className="text-gray-400 mb-4 leading-relaxed">
-              Your premier online shopping destination. Quality products, competitive prices, and exceptional customer service.
+            <p className="text-sand/70 mb-4 leading-relaxed">
+              Your trusted hardware and general store serving Migori County with quality building materials, paint, and everyday essentials.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3">
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
-                className="bg-gray-800 p-2 rounded-full hover:bg-blue-600 transition-colors">
-                <FiFacebook className="w-5 h-5" />
+                className="bg-terra/20 p-2 border border-terra hover:bg-terra hover:scale-110 transition-all duration-300">
+                <FiFacebook className="w-5 h-5 text-terra hover:text-white" />
               </a>
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
-                className="bg-gray-800 p-2 rounded-full hover:bg-blue-400 transition-colors">
-                <FiTwitter className="w-5 h-5" />
+                className="bg-terra/20 p-2 border border-terra hover:bg-terra hover:scale-110 transition-all duration-300">
+                <FiTwitter className="w-5 h-5 text-terra hover:text-white" />
               </a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-                className="bg-gray-800 p-2 rounded-full hover:bg-pink-600 transition-colors">
-                <FiInstagram className="w-5 h-5" />
+                className="bg-terra/20 p-2 border border-terra hover:bg-terra hover:scale-110 transition-all duration-300">
+                <FiInstagram className="w-5 h-5 text-terra hover:text-white" />
               </a>
               <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"
-                className="bg-gray-800 p-2 rounded-full hover:bg-red-600 transition-colors">
-                <FiYoutube className="w-5 h-5" />
+                className="bg-terra/20 p-2 border border-terra hover:bg-terra hover:scale-110 transition-all duration-300">
+                <FiYoutube className="w-5 h-5 text-terra hover:text-white" />
               </a>
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
-                className="bg-gray-800 p-2 rounded-full hover:bg-blue-700 transition-colors">
-                <FiLinkedin className="w-5 h-5" />
+                className="bg-terra/20 p-2 border border-terra hover:bg-terra hover:scale-110 transition-all duration-300">
+                <FiLinkedin className="w-5 h-5 text-terra hover:text-white" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="font-h text-lg font-bold text-terra mb-4 uppercase">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/products" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   Shop
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/about" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/contact" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   Contact
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/faq" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   FAQ
                 </Link>
               </li>
@@ -163,35 +163,35 @@ const Footer = () => {
 
           {/* Customer Service */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Customer Service</h3>
+            <h3 className="font-h text-lg font-bold text-terra mb-4 uppercase">Customer Service</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/privacy-policy" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/privacy-policy" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/terms" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link to="/shipping" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/shipping" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   Shipping Info
                 </Link>
               </li>
               <li>
-                <Link to="/returns" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/returns" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   Returns Policy
                 </Link>
               </li>
               <li>
-                <Link to="/payment" className="text-gray-400 hover:text-blue-400 transition-colors flex items-center">
-                  <FiChevronRight className="w-4 h-4 mr-2" />
+                <Link to="/payment" className="text-sand/70 hover:text-terra transition-colors flex items-center group">
+                  <FiChevronRight className="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform" />
                   Payment Methods
                 </Link>
               </li>
@@ -200,42 +200,42 @@ const Footer = () => {
 
           {/* Contact & Newsletter */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Stay Connected</h3>
+            <h3 className="font-h text-lg font-bold text-terra mb-4 uppercase">Stay Connected</h3>
             <div className="space-y-3 mb-4">
-              <div className="flex items-center space-x-3 text-gray-400">
-                <FiMapPin className="w-5 h-5 flex-shrink-0" />
-                <span>123 Business Street, Nairobi, Kenya</span>
+              <div className="flex items-center space-x-3 text-sand/70">
+                <FiMapPin className="w-5 h-5 flex-shrink-0 text-terra" />
+                <span>A1 Highway, Migori, Kenya</span>
               </div>
-              <div className="flex items-center space-x-3 text-gray-400">
-                <FiPhone className="w-5 h-5 flex-shrink-0" />
-                <span>+254 700 000 000</span>
+              <div className="flex items-center space-x-3 text-sand/70">
+                <FiPhone className="w-5 h-5 flex-shrink-0 text-terra" />
+                <a href="tel:0712437715" className="hover:text-terra transition-colors">0712 437 715</a>
               </div>
-              <div className="flex items-center space-x-3 text-gray-400">
-                <FiMail className="w-5 h-5 flex-shrink-0" />
-                <span>info@shophub.com</span>
+              <div className="flex items-center space-x-3 text-sand/70">
+                <FiMail className="w-5 h-5 flex-shrink-0 text-terra" />
+                <a href="mailto:info@kionehardware.com" className="hover:text-terra transition-colors">info@kionehardware.com</a>
               </div>
-              <div className="flex items-center space-x-3 text-gray-400">
-                <FiClock className="w-5 h-5 flex-shrink-0" />
-                <span>Mon-Sat: 9AM - 6PM</span>
+              <div className="flex items-center space-x-3 text-sand/70">
+                <FiClock className="w-5 h-5 flex-shrink-0 text-terra" />
+                <span>Mon-Sat: 8AM - 7PM</span>
               </div>
             </div>
 
-            {/* Newsletter - Fixed Version */}
+            {/* Newsletter */}
             <div className="mt-4">
-              <h4 className="text-sm font-semibold mb-2">Subscribe to Newsletter</h4>
+              <h4 className="text-sm font-semibold text-terra mb-2 uppercase tracking-wider">Subscribe to Newsletter</h4>
               <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email address"
-                  className="flex-1 px-3 py-2 bg-gray-800 text-white rounded-lg sm:rounded-l-lg sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                  className="flex-1 px-3 py-2 bg-terra/10 text-white border-2 border-terra focus:outline-none focus:ring-2 focus:ring-terra w-full"
                   disabled={isSubscribing}
                 />
                 <button
                   type="submit"
                   disabled={isSubscribing}
-                  className="bg-blue-600 px-4 py-2 rounded-lg sm:rounded-r-lg sm:rounded-l-none hover:bg-blue-700 transition-colors disabled:bg-blue-400 flex items-center justify-center space-x-2 whitespace-nowrap"
+                  className="bg-terra text-white px-4 py-2 border-2 border-terra hover:bg-terra-dark hover:border-terra-dark transition-all flex items-center justify-center space-x-2 whitespace-nowrap"
                 >
                   <FiSend className="w-5 h-5" />
                   <span className="hidden sm:inline">{isSubscribing ? '...' : 'Subscribe'}</span>
@@ -244,10 +244,11 @@ const Footer = () => {
               </form>
 
               {subscribeMessage && (
-                <div className={`mt-3 p-2 rounded-lg flex items-center space-x-2 text-sm ${messageType === 'success'
-                  ? 'bg-green-900/50 text-green-400 border border-green-700'
-                  : 'bg-red-900/50 text-red-400 border border-red-700'
-                  }`}>
+                <div className={`mt-3 p-2 border flex items-center space-x-2 text-sm ${
+                  messageType === 'success'
+                    ? 'bg-green-900/50 text-green-400 border-green-700'
+                    : 'bg-red-900/50 text-red-400 border-red-700'
+                }`}>
                   {messageType === 'success' ? (
                     <FiCheckCircle className="w-4 h-4 flex-shrink-0" />
                   ) : (
@@ -257,49 +258,57 @@ const Footer = () => {
                 </div>
               )}
 
-              <p className="text-xs text-gray-500 mt-2">
-                Get exclusive offers, new product alerts, and 10% off your first order!
+              <p className="text-xs text-sand/50 mt-2">
+                Get exclusive offers and new product alerts!
               </p>
             </div>
           </div>
         </div>
 
         {/* Features Bar */}
-        <div className="border-t border-gray-800 pt-8 mb-8">
+        <div className="border-t-2 border-terra/30 pt-8 mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="flex items-center space-x-3">
-              <FiTruck className="w-8 h-8 text-blue-400" />
+              <div className="bg-terra/20 p-3 border border-terra">
+                <FiTruck className="w-6 h-6 text-terra" />
+              </div>
               <div>
-                <h4 className="font-semibold">Free Shipping</h4>
-                <p className="text-sm text-gray-400">On orders over KSh 5,000</p>
+                <h4 className="font-h font-bold text-terra">Free Delivery</h4>
+                <p className="text-sm text-sand/50">On orders over KSh 5,000</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <FiShield className="w-8 h-8 text-blue-400" />
+              <div className="bg-terra/20 p-3 border border-terra">
+                <FiShield className="w-6 h-6 text-terra" />
+              </div>
               <div>
-                <h4 className="font-semibold">Secure Payment</h4>
-                <p className="text-sm text-gray-400">100% secure transactions</p>
+                <h4 className="font-h font-bold text-terra">Secure Payment</h4>
+                <p className="text-sm text-sand/50">100% secure transactions</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <FiRefreshCw className="w-8 h-8 text-blue-400" />
+              <div className="bg-terra/20 p-3 border border-terra">
+                <FiRefreshCw className="w-6 h-6 text-terra" />
+              </div>
               <div>
-                <h4 className="font-semibold">Easy Returns</h4>
-                <p className="text-sm text-gray-400">30-day return policy</p>
+                <h4 className="font-h font-bold text-terra">Quality Guaranteed</h4>
+                <p className="text-sm text-sand/50">Authentic products only</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <FiHeart className="w-8 h-8 text-blue-400" />
+              <div className="bg-terra/20 p-3 border border-terra">
+                <FiHeart className="w-6 h-6 text-terra" />
+              </div>
               <div>
-                <h4 className="font-semibold">24/7 Support</h4>
-                <p className="text-sm text-gray-400">Dedicated customer service</p>
+                <h4 className="font-h font-bold text-terra">Trusted Service</h4>
+                <p className="text-sm text-sand/50">Since day one in Migori</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Payment Methods & Copyright */}
-        <div className="border-t border-gray-800 pt-8">
+        <div className="border-t-2 border-terra/30 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex space-x-3 flex-wrap gap-2">
               {/* Visa */}
@@ -320,14 +329,14 @@ const Footer = () => {
                 alt="PayPal"
                 className="h-8 bg-white rounded p-1"
               />
-              {/* M-Pesa - Text Badge (Always works) */}
+              {/* M-Pesa */}
               <div className="bg-white rounded p-1 h-8 px-3 flex items-center justify-center shadow-sm">
                 <span className="text-green-600 font-bold text-sm tracking-wide">M-PESA</span>
               </div>
             </div>
-            <div className="text-center text-gray-400 text-sm">
-              <p>&copy; {currentYear} ShopHub. All rights reserved.</p>
-              <p className="mt-1">Made with <FiHeart className="w-4 h-4 inline text-red-500" /> for the best shopping experience</p>
+            <div className="text-center text-sand/50 text-sm">
+              <p>&copy; {currentYear} Kione Hardware & General Stores. All rights reserved.</p>
+              <p className="mt-1">Located on A1 Highway, Migori, Kenya</p>
             </div>
           </div>
         </div>

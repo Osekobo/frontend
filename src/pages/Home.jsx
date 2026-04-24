@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';  // Add this import
+import toast, { Toaster } from 'react-hot-toast';
 import useProductStore from '../store/productStore';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
@@ -35,71 +35,68 @@ const Home = () => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [addedToCart, setAddedToCart] = useState({});
 
-  // Hero slides data
+  // Hero slides data with Kione colors
   const heroSlides = [
     {
       id: 1,
-      title: "Summer Collection 2026",
-      subtitle: "Discover the latest trends at unbeatable prices",
-      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200",
+      title: "Quality Building Materials",
+      subtitle: "Build your dream home with trusted supplies",
+      image: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200",
       cta: "Shop Now",
-      color: "from-blue-600 to-purple-600"
     },
     {
       id: 2,
-      title: "Electronics Sale",
-      subtitle: "Up to 40% off on premium gadgets",
-      image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1200",
+      title: "Premium Paints",
+      subtitle: "Transform your space with quality finishes",
+      image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1200",
       cta: "Explore Deals",
-      color: "from-green-600 to-teal-600"
     },
     {
       id: 3,
-      title: "Free Shipping",
-      subtitle: "On all orders over KSh 5,000",
-      image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200",
+      title: "Hardware & Tools",
+      subtitle: "Everything for professional and DIY projects",
+      image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1200",
       cta: "Shop Now",
-      color: "from-orange-600 to-red-600"
     }
   ];
 
-  // Why Choose Us data
+  // Why Choose Us data with Kione colors (all using terra color)
   const whyChooseUs = [
     {
       icon: <FiTruck className="w-8 h-8" />,
       title: "Free Delivery",
       description: "Free shipping on orders over KSh 5,000",
-      color: "bg-blue-100 text-blue-600"
+      color: "bg-terra/10 text-terra"
     },
     {
       icon: <FiShield className="w-8 h-8" />,
       title: "Secure Payment",
       description: "100% secure payment with M-Pesa",
-      color: "bg-green-100 text-green-600"
+      color: "bg-terra/10 text-terra"
     },
     {
       icon: <FiRefreshCw className="w-8 h-8" />,
       title: "Easy Returns",
       description: "30-day money-back guarantee",
-      color: "bg-purple-100 text-purple-600"
+      color: "bg-terra/10 text-terra"
     },
     {
       icon: <FiHeadphones className="w-8 h-8" />,
       title: "24/7 Support",
       description: "Dedicated customer service team",
-      color: "bg-orange-100 text-orange-600"
+      color: "bg-terra/10 text-terra"
     },
     {
       icon: <FiTrendingUp className="w-8 h-8" />,
       title: "Best Prices",
       description: "Price match guarantee",
-      color: "bg-red-100 text-red-600"
+      color: "bg-terra/10 text-terra"
     },
     {
       icon: <FiAward className="w-8 h-8" />,
       title: "Quality Products",
       description: "100% authentic products",
-      color: "bg-yellow-100 text-yellow-600"
+      color: "bg-terra/10 text-terra"
     }
   ];
 
@@ -110,7 +107,7 @@ const Home = () => {
       name: "John Mwangi",
       location: "Nairobi, Kenya",
       rating: 5,
-      text: "Absolutely love shopping at ShopHub! The delivery was fast, and the product quality exceeded my expectations. Will definitely be buying more from here.",
+      text: "Absolutely love shopping at Kione Hardware! The delivery was fast, and the product quality exceeded my expectations. Will definitely be buying more from here.",
       image: "https://randomuser.me/api/portraits/men/1.jpg",
       date: "March 2026"
     },
@@ -119,7 +116,7 @@ const Home = () => {
       name: "Sarah Kamau",
       location: "Mombasa, Kenya",
       rating: 5,
-      text: "Best online shopping experience in Kenya! The M-Pesa payment integration is seamless, and customer support is very responsive. Highly recommended!",
+      text: "Best hardware shopping experience in Kenya! The M-Pesa payment integration is seamless, and customer support is very responsive. Highly recommended!",
       image: "https://randomuser.me/api/portraits/women/2.jpg",
       date: "February 2026"
     },
@@ -128,7 +125,7 @@ const Home = () => {
       name: "David Ochieng",
       location: "Kisumu, Kenya",
       rating: 5,
-      text: "I've bought electronics from ShopHub twice now. The products are authentic, prices are competitive, and shipping is quick. 10/10 experience!",
+      text: "I've bought building materials from Kione twice now. The products are authentic, prices are competitive, and shipping is quick. 10/10 experience!",
       image: "https://randomuser.me/api/portraits/men/3.jpg",
       date: "January 2026"
     },
@@ -146,7 +143,7 @@ const Home = () => {
       name: "Michael Otieno",
       location: "Eldoret, Kenya",
       rating: 5,
-      text: "The best part about ShopHub is the variety of products. Found everything I needed in one place. Delivery was prompt and well-packaged.",
+      text: "The best part about Kione Hardware is the variety of products. Found everything I needed in one place. Delivery was prompt and well-packaged.",
       image: "https://randomuser.me/api/portraits/men/5.jpg",
       date: "November 2025"
     }
@@ -212,14 +209,14 @@ const Home = () => {
     }
   ];
 
-  // Categories data
+  // Categories data with Kione colors
   const categories = [
-    { name: "Electronics", icon: "💻", color: "bg-blue-100", textColor: "text-blue-600", count: "120+ products" },
-    { name: "Fashion", icon: "👕", color: "bg-pink-100", textColor: "text-pink-600", count: "250+ products" },
-    { name: "Home & Living", icon: "🏠", color: "bg-green-100", textColor: "text-green-600", count: "80+ products" },
-    { name: "Sports", icon: "⚽", color: "bg-orange-100", textColor: "text-orange-600", count: "60+ products" },
-    { name: "Books", icon: "📚", color: "bg-purple-100", textColor: "text-purple-600", count: "150+ products" },
-    { name: "Toys", icon: "🎮", color: "bg-yellow-100", textColor: "text-yellow-600", count: "90+ products" }
+    { name: "Building Materials", icon: "🧱", color: "bg-terra/10", textColor: "text-terra", count: "50+ products" },
+    { name: "Paints", icon: "🎨", color: "bg-terra/10", textColor: "text-terra", count: "30+ products" },
+    { name: "Hardware Tools", icon: "🔧", color: "bg-terra/10", textColor: "text-terra", count: "80+ products" },
+    { name: "Plumbing", icon: "🚰", color: "bg-terra/10", textColor: "text-terra", count: "40+ products" },
+    { name: "Electrical", icon: "⚡", color: "bg-terra/10", textColor: "text-terra", count: "60+ products" },
+    { name: "General Store", icon: "🏪", color: "bg-terra/10", textColor: "text-terra", count: "100+ products" }
   ];
 
   // Partners carousel settings
@@ -302,15 +299,14 @@ const Home = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-terra"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Add Toaster component for toast notifications */}
-      <Toaster 
+    <div className="min-h-screen bg-warm">
+      <Toaster
         position="top-right"
         toastOptions={{
           duration: 3000,
@@ -321,7 +317,7 @@ const Home = () => {
           success: {
             duration: 3000,
             iconTheme: {
-              primary: '#10B981',
+              primary: '#E04E00',
               secondary: '#fff',
             },
           },
@@ -353,6 +349,7 @@ const Home = () => {
               <div className="relative h-full flex items-center">
                 <div className="container mx-auto px-4">
                   <div className="max-w-2xl text-white">
+                    <p className="text-terra font-semibold mb-2">Kione Hardware</p>
                     <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
                       {slide.title}
                     </h1>
@@ -361,7 +358,7 @@ const Home = () => {
                     </p>
                     <Link
                       to="/products"
-                      className="inline-flex items-center px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-100 transition-colors group"
+                      className="inline-flex items-center px-6 py-3 bg-terra text-white rounded-lg font-semibold hover:bg-terra-dark transition-colors group"
                     >
                       {slide.cta}
                       <FiChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" />
@@ -390,7 +387,7 @@ const Home = () => {
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all ${index === currentSlide ? 'w-8 bg-white' : 'bg-white/50'
+                className={`w-2 h-2 rounded-full transition-all ${index === currentSlide ? 'w-8 bg-terra' : 'bg-white/50'
                   }`}
               />
             ))}
@@ -398,13 +395,12 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Rest of your sections remain exactly the same */}
       {/* 2. Why Choose Us Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-              Why Choose ShopHub?
+              Why Choose Kione Hardware?
             </h2>
             <p className="text-gray-600 text-lg">We provide the best shopping experience in Kenya</p>
           </div>
@@ -426,7 +422,7 @@ const Home = () => {
       </section>
 
       {/* 3. Shop by Category Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-warm">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -462,7 +458,7 @@ const Home = () => {
             </div>
             <Link
               to="/products"
-              className="text-blue-600 hover:text-blue-700 font-semibold flex items-center group"
+              className="text-terra hover:text-terra-dark font-semibold flex items-center group"
             >
               View All
               <FiChevronRight className="ml-1 group-hover:translate-x-1 transition-transform" />
@@ -488,25 +484,25 @@ const Home = () => {
                     }`}>
                     <button
                       onClick={() => handleAddToCart(product)}
-                      className="p-2 bg-white rounded-full hover:bg-blue-600 hover:text-white transition-colors"
+                      className="p-2 bg-terra text-white rounded-full hover:bg-terra-dark transition-colors"
                     >
                       <FiShoppingCart className="w-5 h-5" />
                     </button>
                     <Link
                       to={`/product/${product.id}`}
-                      className="p-2 bg-white rounded-full hover:bg-blue-600 hover:text-white transition-colors"
+                      className="p-2 bg-terra text-white rounded-full hover:bg-terra-dark transition-colors"
                     >
                       <FiEye className="w-5 h-5" />
                     </Link>
                   </div>
 
                   {product.stock < 10 && product.stock > 0 && (
-                    <div className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-semibold">
+                    <div className="absolute top-4 left-4 bg-terra text-white px-2 py-1 rounded-md text-xs font-semibold">
                       Low Stock
                     </div>
                   )}
 
-                  <div className="absolute top-4 right-4 bg-blue-500 text-white px-2 py-1 rounded-md text-xs font-semibold">
+                  <div className="absolute top-4 right-4 bg-terra text-white px-2 py-1 rounded-md text-xs font-semibold">
                     New
                   </div>
                 </div>
@@ -520,7 +516,7 @@ const Home = () => {
                   </p>
                   <div className="flex justify-between items-center">
                     <div>
-                      <span className="text-2xl font-bold text-blue-600">
+                      <span className="text-2xl font-bold text-terra">
                         KSh {product.price.toLocaleString()}
                       </span>
                     </div>
@@ -549,7 +545,7 @@ const Home = () => {
       </section>
 
       {/* 5. What Our Customers Say Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-50 to-purple-50">
+      <section className="py-16 bg-gradient-to-r from-terra/5 to-terra/10">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -560,7 +556,7 @@ const Home = () => {
 
           <div className="max-w-4xl mx-auto">
             <div className="relative bg-white rounded-2xl shadow-xl p-8 md:p-12">
-              <div className="absolute top-4 left-4 text-6xl text-blue-100">"</div>
+              <div className="absolute top-4 left-4 text-6xl text-terra/20">"</div>
 
               <div className="flex justify-center mb-6">
                 {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
@@ -576,7 +572,7 @@ const Home = () => {
                 <img
                   src={testimonials[currentTestimonial].image}
                   alt={testimonials[currentTestimonial].name}
-                  className="w-16 h-16 rounded-full object-cover border-4 border-blue-500 mb-4"
+                  className="w-16 h-16 rounded-full object-cover border-4 border-terra mb-4"
                 />
                 <h4 className="text-xl font-semibold text-gray-800">
                   {testimonials[currentTestimonial].name}
@@ -591,13 +587,13 @@ const Home = () => {
 
               <button
                 onClick={prevTestimonial}
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white shadow-lg p-2 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-white shadow-lg p-2 rounded-full hover:bg-terra hover:text-white transition-all duration-300"
               >
                 <FiChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={nextTestimonial}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white shadow-lg p-2 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-white shadow-lg p-2 rounded-full hover:bg-terra hover:text-white transition-all duration-300"
               >
                 <FiChevronRight className="w-6 h-6" />
               </button>
@@ -607,7 +603,7 @@ const Home = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${index === currentTestimonial ? 'w-8 bg-blue-600' : 'bg-gray-300'
+                    className={`w-2 h-2 rounded-full transition-all ${index === currentTestimonial ? 'w-8 bg-terra' : 'bg-gray-300'
                       }`}
                   />
                 ))}
@@ -616,15 +612,15 @@ const Home = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
               <div className="text-center p-4">
-                <div className="text-3xl font-bold text-blue-600">1,000+</div>
+                <div className="text-3xl font-bold text-terra">1,000+</div>
                 <div className="text-gray-600">Happy Customers</div>
               </div>
               <div className="text-center p-4">
-                <div className="text-3xl font-bold text-blue-600">4.8/5</div>
+                <div className="text-3xl font-bold text-terra">4.8/5</div>
                 <div className="text-gray-600">Average Rating</div>
               </div>
               <div className="text-center p-4">
-                <div className="text-3xl font-bold text-blue-600">500+</div>
+                <div className="text-3xl font-bold text-terra">500+</div>
                 <div className="text-gray-600">Products Sold</div>
               </div>
             </div>
@@ -673,13 +669,13 @@ const Home = () => {
               <>
                 <button
                   onClick={prevPartners}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 bg-white shadow-lg p-2 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 bg-white shadow-lg p-2 rounded-full hover:bg-terra hover:text-white transition-all duration-300"
                 >
                   <FiChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                   onClick={nextPartners}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 bg-white shadow-lg p-2 rounded-full hover:bg-blue-500 hover:text-white transition-all duration-300"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 bg-white shadow-lg p-2 rounded-full hover:bg-terra hover:text-white transition-all duration-300"
                 >
                   <FiChevronRight className="w-5 h-5" />
                 </button>
@@ -687,7 +683,7 @@ const Home = () => {
             )}
           </div>
 
-          <div className="text-center mt-12 p-6 bg-blue-50 rounded-xl">
+          <div className="text-center mt-12 p-6 bg-terra/10 rounded-xl">
             <p className="text-gray-700">
               🤝 <span className="font-semibold">100+ partners</span> trust us with their business
             </p>
@@ -697,7 +693,7 @@ const Home = () => {
 
       {/* 7. Call to Action Banner for Non-Logged-in Users */}
       {!user && (
-        <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
+        <section className="py-16 bg-terra">
           <div className="container mx-auto px-4 text-center">
             <div className="max-w-3xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -709,13 +705,13 @@ const Home = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   to="/register"
-                  className="px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                  className="px-8 py-3 bg-white text-terra rounded-lg font-semibold hover:bg-gray-100 transition-colors"
                 >
                   Create Account
                 </Link>
                 <Link
                   to="/login"
-                  className="px-8 py-3 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
+                  className="px-8 py-3 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-terra transition-colors"
                 >
                   Login
                 </Link>
@@ -730,19 +726,19 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
             <div className="flex items-center space-x-2">
-              <FiShield className="w-6 h-6 text-green-600" />
+              <FiShield className="w-6 h-6 text-terra" />
               <span className="text-gray-700">100% Secure Payments</span>
             </div>
             <div className="flex items-center space-x-2">
-              <FiTruck className="w-6 h-6 text-blue-600" />
+              <FiTruck className="w-6 h-6 text-terra" />
               <span className="text-gray-700">Free Delivery Over KSh 5,000</span>
             </div>
             <div className="flex items-center space-x-2">
-              <FiClock className="w-6 h-6 text-orange-600" />
+              <FiClock className="w-6 h-6 text-terra" />
               <span className="text-gray-700">Fast Delivery Nationwide</span>
             </div>
             <div className="flex items-center space-x-2">
-              <FiAward className="w-6 h-6 text-purple-600" />
+              <FiAward className="w-6 h-6 text-terra" />
               <span className="text-gray-700">Quality Guaranteed</span>
             </div>
           </div>
@@ -755,11 +751,11 @@ const Home = () => {
           href="https://wa.me/254714391137?text=Hello%21%20I%20have%20a%20question%20about%20your%20products"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center w-14 h-14 bg-green-500 rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 hover:scale-110"
+          className="flex items-center justify-center w-14 h-14 bg-terra rounded-full shadow-lg hover:bg-terra-dark transition-all duration-300 hover:scale-110"
         >
           <FaWhatsapp className="w-7 h-7 text-white" />
         </a>
-        
+
         {/* Tooltip that appears on hover */}
         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
           Chat with us on WhatsApp

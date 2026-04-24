@@ -11,15 +11,15 @@
 @layer components {
   /* Navbar component styles */
   .nav-link {
-    @apply text-gray-700 hover:text-blue-600 transition-colors duration-200;
+    @apply text-gray-700 hover:text-terra transition-colors duration-200;
   }
   
   .nav-link-active {
-    @apply text-blue-600 font-semibold;
+    @apply text-terra font-semibold;
   }
   
   .mobile-nav-item {
-    @apply flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors;
+    @apply flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-terra/10 hover:text-terra rounded-lg transition-colors;
   }
   
   .mobile-nav-item-danger {
@@ -41,7 +41,7 @@
   
   /* Cart badge */
   .cart-badge {
-    @apply absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center;
+    @apply absolute -top-2 -right-2 bg-terra text-white text-xs rounded-full w-5 h-5 flex items-center justify-center;
   }
 }
 
@@ -109,4 +109,196 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* ========== KIONE HARDWARE CUSTOM COLORS ========== */
+
+:root {
+  --c-terra: #E04E00;
+  --c-terra-dark: #B83E00;
+  --c-black: #121518;
+  --c-sand: #D6B896;
+  --c-ash: #4A4641;
+  --c-warm: #FBF6EF;
+}
+
+/* Background Colors */
+.bg-terra { background-color: var(--c-terra); }
+.bg-terra-dark { background-color: var(--c-terra-dark); }
+.bg-terra\/10 { background-color: rgba(224, 78, 0, 0.1); }
+.bg-terra\/20 { background-color: rgba(224, 78, 0, 0.2); }
+.bg-terra\/30 { background-color: rgba(224, 78, 0, 0.3); }
+.bg-terra\/40 { background-color: rgba(224, 78, 0, 0.4); }
+.bg-terra\/50 { background-color: rgba(224, 78, 0, 0.5); }
+.bg-terra\/60 { background-color: rgba(224, 78, 0, 0.6); }
+.bg-terra\/70 { background-color: rgba(224, 78, 0, 0.7); }
+.bg-terra\/80 { background-color: rgba(224, 78, 0, 0.8); }
+.bg-terra\/90 { background-color: rgba(224, 78, 0, 0.9); }
+.bg-sand { background-color: var(--c-sand); }
+.bg-black-custom { background-color: var(--c-black); }
+.bg-ash { background-color: var(--c-ash); }
+.bg-warm { background-color: var(--c-warm); }
+
+/* Text Colors */
+.text-terra { color: var(--c-terra); }
+.text-terra-dark { color: var(--c-terra-dark); }
+.text-sand { color: var(--c-sand); }
+.text-ash { color: var(--c-ash); }
+.text-warm { color: var(--c-warm); }
+.text-black-custom { color: var(--c-black); }
+
+/* Border Colors */
+.border-terra { border-color: var(--c-terra); }
+.border-terra-dark { border-color: var(--c-terra-dark); }
+.border-sand { border-color: var(--c-sand); }
+.border-ash { border-color: var(--c-ash); }
+.border-warm { border-color: var(--c-warm); }
+.border-black-custom { border-color: var(--c-black); }
+
+/* Hover Backgrounds */
+.hover\:bg-terra:hover { background-color: var(--c-terra); }
+.hover\:bg-terra-dark:hover { background-color: var(--c-terra-dark); }
+.hover\:bg-terra\/10:hover { background-color: rgba(224, 78, 0, 0.1); }
+.hover\:bg-terra\/20:hover { background-color: rgba(224, 78, 0, 0.2); }
+.hover\:bg-sand:hover { background-color: var(--c-sand); }
+.hover\:bg-warm:hover { background-color: var(--c-warm); }
+
+/* Hover Text Colors */
+.hover\:text-terra:hover { color: var(--c-terra); }
+.hover\:text-terra-dark:hover { color: var(--c-terra-dark); }
+.hover\:text-sand:hover { color: var(--c-sand); }
+.hover\:text-warm:hover { color: var(--c-warm); }
+
+/* Focus Rings */
+.focus\:ring-terra:focus {
+  --tw-ring-color: var(--c-terra);
+}
+.focus\:ring-terra-dark:focus {
+  --tw-ring-color: var(--c-terra-dark);
+}
+
+/* Gradient Backgrounds */
+.from-terra {
+  --tw-gradient-from: var(--c-terra);
+}
+.to-terra-dark {
+  --tw-gradient-to: var(--c-terra-dark);
+}
+.from-terra\/10 {
+  --tw-gradient-from: rgba(224, 78, 0, 0.1);
+}
+.to-terra\/20 {
+  --tw-gradient-to: rgba(224, 78, 0, 0.2);
+}
+
+/* Shadow Colors */
+.shadow-terra {
+  --tw-shadow-color: var(--c-terra);
+}
+.shadow-terra-dark {
+  --tw-shadow-color: var(--c-terra-dark);
+}
+.shadow-sand {
+  --tw-shadow-color: var(--c-sand);
+}
+.shadow-black-custom {
+  --tw-shadow-color: var(--c-black);
+}
+
+/* Ring Colors */
+.ring-terra {
+  --tw-ring-color: var(--c-terra);
+}
+.ring-terra-dark {
+  --tw-ring-color: var(--c-terra-dark);
+}
+
+/* Placeholder Colors */
+.placeholder-terra::placeholder {
+  color: var(--c-terra);
+}
+.placeholder-ash::placeholder {
+  color: var(--c-ash);
+}
+
+/* Selection Color */
+::selection {
+  background-color: var(--c-terra);
+  color: white;
+}
+
+/* Focus Visible */
+.focus-visible\:ring-terra:focus-visible {
+  --tw-ring-color: var(--c-terra);
+}
+
+/* Active Backgrounds */
+.active\:bg-terra:active {
+  background-color: var(--c-terra);
+}
+.active\:bg-terra-dark:active {
+  background-color: var(--c-terra-dark);
+}
+
+/* Group Hover */
+.group:hover .group-hover\:bg-terra {
+  background-color: var(--c-terra);
+}
+.group:hover .group-hover\:text-terra {
+  color: var(--c-terra);
+}
+.group:hover .group-hover\:border-terra {
+  border-color: var(--c-terra);
+}
+.group:hover .group-hover\:from-terra {
+  --tw-gradient-from: var(--c-terra);
+}
+.group:hover .group-hover\:to-terra-dark {
+  --tw-gradient-to: var(--c-terra-dark);
+}
+
+/* Brick Line Pattern for Kione Hardware */
+.brick-line {
+  height: 6px;
+  background: repeating-linear-gradient(90deg, var(--c-terra) 0, var(--c-terra) 24px, transparent 24px, transparent 36px);
+  width: 100%;
+  max-width: 120px;
+}
+
+.brick-line-large {
+  height: 8px;
+  background: repeating-linear-gradient(90deg, var(--c-terra) 0, var(--c-terra) 32px, transparent 32px, transparent 48px);
+  width: 100%;
+  max-width: 160px;
+}
+
+/* Hard Shadow Utility (like Kione's design) */
+.shadow-hard {
+  box-shadow: 8px 8px 0 var(--c-terra);
+}
+.shadow-hard-black {
+  box-shadow: 8px 8px 0 var(--c-black);
+}
+.shadow-hard-sand {
+  box-shadow: 8px 8px 0 var(--c-sand);
+}
+.shadow-hard-sm {
+  box-shadow: 4px 4px 0 var(--c-terra);
+}
+.shadow-hard-lg {
+  box-shadow: 12px 12px 0 var(--c-terra);
+}
+
+/* Transition for hard shadow hover effects */
+.transition-hard {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover\:shadow-hard-sm:hover {
+  box-shadow: 4px 4px 0 var(--c-terra);
+}
+.hover\:translate-x-\[2px\]:hover {
+  transform: translateX(2px);
+}
+.hover\:translate-y-\[2px\]:hover {
+  transform: translateY(2px);
 }
