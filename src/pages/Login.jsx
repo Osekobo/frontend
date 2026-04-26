@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';  // ✅ Add useEffect
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+import { FiMail, FiLock, FiLogIn, FiShield } from 'react-icons/fi';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, isLoading, error, clearError } = useAuthStore();  // ✅ Add clearError
+  const { login, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
 
-  // ✅ Clear any stale errors when login page loads
+  // Clear any stale errors when login page loads
   useEffect(() => {
     clearError();
   }, [clearError]);
@@ -25,15 +26,12 @@ const Login = () => {
   const formatErrorMessage = (error) => {
     if (!error) return null;
 
-    // If it's a string, return it directly
     if (typeof error === 'string') return error;
 
-    // If it's an array of errors (FastAPI validation errors)
     if (Array.isArray(error)) {
       return error.map(err => err.msg || JSON.stringify(err)).join(', ');
     }
 
-    // If it's an object with detail (FastAPI standard error)
     if (error.detail) {
       if (Array.isArray(error.detail)) {
         return error.detail.map(err => err.msg).join(', ');
@@ -41,72 +39,147 @@ const Login = () => {
       return error.detail;
     }
 
-    // If it's an object with message
     if (error.message) return error.message;
 
-    // Default fallback
     return 'An error occurred. Please try again.';
   };
 
   const errorMessage = formatErrorMessage(error);
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
-
-      {errorMessage && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {errorMessage}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
+    <div className="min-h-screen bg-warm flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full">
+        {/* Logo / Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-terra border-4 border-black shadow-hard-sm mb-4">
+            <FiShield className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="font-h text-3xl font-bold text-black uppercase tracking-tight">Welcome Back</h1>
+          <p className="text-ash mt-2">Sign in to your account</p>
+          <div className="brick-line mx-auto mt-4"></div>
         </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Password
-          </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
+        {/* Login Card */}
+        <div className="bg-white border-4 border-black shadow-hard-lg p-8">
+          <h2 className="font-h text-2xl font-bold text-black text-center mb-6 uppercase">
+            Login
+          </h2>
+
+          {errorMessage && (
+            <div className="bg-red-100 border-2 border-red-500 text-red-700 px-4 py-3 mb-4">
+              <p className="font-semibold">Error</p>
+              <p className="text-sm">{errorMessage}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            {/* Email Field */}
+            <div className="mb-5">
+              <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiMail className="h-5 w-5 text-ash" />
+                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra focus:border-transparent"
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiLock className="h-5 h-5 text-ash" />
+                </div>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra focus:border-transparent"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Forgot Password Link */}
+            <div className="text-right mb-6">
+              <Link 
+                to="/forgot-password" 
+                className="text-sm text-terra hover:text-terra-dark font-semibold transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-terra text-white py-3 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 flex items-center justify-center space-x-2"
+            >
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                  <span>Logging in...</span>
+                </>
+              ) : (
+                <>
+                  <FiLogIn className="w-5 h-5" />
+                  <span>Login</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Register Link */}
+          <div className="mt-6 text-center">
+            <p className="text-ash">
+              Don't have an account?{' '}
+              <Link to="/register" className="text-terra hover:text-terra-dark font-bold uppercase tracking-wider transition-colors">
+                Register
+              </Link>
+            </p>
+          </div>
+
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t-2 border-black"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-ash">Secure Login</span>
+            </div>
+          </div>
+
+          {/* Security Note */}
+          <div className="text-center text-xs text-ash">
+            <p>✓ 100% Secure Login</p>
+            <p className="mt-1">✓ Protected by M-Pesa security standards</p>
+          </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400"
-        >
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-
-      <p className="text-center text-gray-600 mt-4">
-        Don't have an account?{' '}
-        <Link to="/register" className="text-blue-600 hover:text-blue-700">
-          Register
-        </Link>
-      </p>
-      <p className="text-center text-gray-600 mt-4">
-        <Link to="/forgot-password" className="text-blue-600 hover:text-blue-700 text-sm">
-          Forgot password?
-        </Link>
-      </p>
+        {/* Help Text */}
+        <div className="text-center mt-6">
+          <p className="text-xs text-ash">
+            Having trouble?{' '}
+            <a href="https://wa.me/254714391137" className="text-terra hover:text-terra-dark font-semibold">
+              Contact Support
+            </a>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

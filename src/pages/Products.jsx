@@ -71,7 +71,7 @@ const Products = () => {
     fetchProducts();
   }, []);
 
-  // ✅ SAFE: Ensure products is an array before filtering
+  // Filter and sort products
   const filteredProducts = Array.isArray(products) 
     ? products.filter(product => {
         const matchesSearch = product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -82,21 +82,19 @@ const Products = () => {
       })
     : [];
 
-  // ✅ SAFE: Sort products
-  const sortedProducts = Array.isArray(filteredProducts) 
-    ? [...filteredProducts].sort((a, b) => {
-        switch(sortBy) {
-          case 'price-asc': return (a.price || 0) - (b.price || 0);
-          case 'price-desc': return (b.price || 0) - (a.price || 0);
-          case 'name-asc': return (a.name || '').localeCompare(b.name || '');
-          case 'name-desc': return (b.name || '').localeCompare(a.name || '');
-          case 'rating': return (b.rating || 0) - (a.rating || 0);
-          default: return 0;
-        }
-      })
-    : [];
+  // Sort products
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch(sortBy) {
+      case 'price-asc': return a.price - b.price;
+      case 'price-desc': return b.price - a.price;
+      case 'name-asc': return a.name.localeCompare(b.name);
+      case 'name-desc': return b.name.localeCompare(a.name);
+      case 'rating': return (b.rating || 0) - (a.rating || 0);
+      default: return 0;
+    }
+  });
 
-  // ✅ SAFE: Pagination
+  // Pagination
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedProducts = sortedProducts.slice(startIndex, startIndex + itemsPerPage);
@@ -135,6 +133,12 @@ const Products = () => {
     setCurrentPage(1);
   };
 
+  // Calculate category counts
+  const getCategoryCount = (categoryId) => {
+    if (categoryId === 'all') return filteredProducts.length;
+    return products.filter(p => p.category === categoryId).length;
+  };
+
   // Loading skeleton
   if (isLoading) {
     return (
@@ -162,19 +166,58 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-warm">
-      {/* Page Header */}
-      <div className="bg-terra text-white py-12 border-b-8 border-black">
+      {/* Page Header - Replaced with relevant info */}
+      <div className="bg-terra text-white py-8 border-b-8 border-black">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="font-h text-3xl sm:text-4xl md:text-5xl font-bold uppercase mb-3">
+            Browse Our Collection
+          </h1>
+          <div className="brick-line mx-auto mb-3"></div>
+          <p className="text-base sm:text-lg opacity-90 max-w-2xl mx-auto">
+            Discover quality building materials, premium paints, hardware tools, and more at affordable prices
+          </p>
+        </div>
+      </div>
+
+      {/* Search Bar - Centered at the top */}
+      <div className="sticky top-16 z-30 bg-warm py-4 border-b-4 border-black shadow-hard-sm">
         <div className="container mx-auto px-4">
-          <h1 className="font-h text-3xl sm:text-4xl md:text-5xl font-bold uppercase mb-4">Our Products</h1>
-          <p className="text-base sm:text-xl opacity-90">Quality building materials and hardware at great prices</p>
+          <div className="max-w-2xl mx-auto">
+            <div className="relative">
+              <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-ash w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search for cement, paint, tools, plumbing and more..."
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="w-full pl-12 pr-4 py-3 border-4 border-black focus:outline-none focus:ring-2 focus:ring-terra text-base"
+              />
+            </div>
+            {searchTerm && (
+              <div className="text-center mt-2">
+                <p className="text-sm text-ash">
+                  Found {filteredProducts.length} {filteredProducts.length === 1 ? 'result' : 'results'} for "{searchTerm}"
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-6 sm:py-8">
         {/* Mobile Filter Button */}
         <div className="lg:hidden mb-4 sm:mb-6">
-          <button onClick={() => setShowFilters(!showFilters)} className="w-full bg-white border-4 border-black px-4 py-3 shadow-hard-sm flex items-center justify-between">
-            <div className="flex items-center space-x-2"><FiSliders className="w-5 h-5 text-terra" /><span className="font-semibold">Filters & Sort</span></div>
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="w-full bg-white border-4 border-black px-4 py-3 shadow-hard-sm flex items-center justify-between"
+          >
+            <div className="flex items-center space-x-2">
+              <FiSliders className="w-5 h-5 text-terra" />
+              <span className="font-semibold">Filters & Sort</span>
+            </div>
             <FiChevronDown className={`w-5 h-5 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
           </button>
         </div>
@@ -182,47 +225,81 @@ const Products = () => {
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Sidebar Filters */}
           <div className={`lg:w-80 ${showFilters ? 'block' : 'hidden lg:block'}`}>
-            <div className="bg-white border-4 border-black shadow-hard-sm p-4 sm:p-6 sticky top-20">
+            <div className="bg-white border-4 border-black shadow-hard-sm p-4 sm:p-6 sticky top-36">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="font-h text-xl font-bold text-black uppercase">Filters</h2>
-                <button onClick={clearFilters} className="text-sm text-terra hover:text-terra-dark font-semibold">Clear All</button>
+                <button
+                  onClick={clearFilters}
+                  className="text-sm text-terra hover:text-terra-dark font-semibold"
+                >
+                  Clear All
+                </button>
               </div>
-              
-              {/* Search */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-black mb-2">Search Products</label>
-                <div className="relative">
-                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-ash" />
-                  <input type="text" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra" />
-                </div>
-              </div>
-              
+
               {/* Categories */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-black mb-3">Categories</label>
+                <label className="block text-sm font-semibold text-black mb-3">
+                  Categories
+                </label>
                 <div className="space-y-2">
                   {categories.map((category) => (
-                    <button key={category.id} onClick={() => setSelectedCategory(category.id)} className={`w-full text-left px-3 py-2 border-2 transition-colors flex items-center space-x-2 ${selectedCategory === category.id ? 'bg-terra text-white border-terra' : 'border-transparent hover:border-terra hover:bg-terra/10'}`}>
-                      <span>{category.icon}</span><span>{category.name}</span>
+                    <button
+                      key={category.id}
+                      onClick={() => setSelectedCategory(category.id)}
+                      className={`w-full text-left px-3 py-2 border-2 transition-colors flex items-center justify-between ${
+                        selectedCategory === category.id
+                          ? 'bg-terra text-white border-terra'
+                          : 'border-transparent hover:border-terra hover:bg-terra/10'
+                      }`}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <span>{category.icon}</span>
+                        <span>{category.name}</span>
+                      </div>
+                      <span className="text-xs">{getCategoryCount(category.id)}</span>
                     </button>
                   ))}
                 </div>
               </div>
-              
+
               {/* Price Range */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-black mb-3">Price Range</label>
+                <label className="block text-sm font-semibold text-black mb-3">
+                  Price Range
+                </label>
                 <div className="space-y-2">
                   {priceRanges.map((range, index) => (
-                    <button key={index} onClick={() => setPriceRange({ min: range.min, max: range.max })} className={`w-full text-left px-3 py-2 border-2 transition-colors ${priceRange.min === range.min && priceRange.max === range.max ? 'bg-terra text-white border-terra' : 'border-transparent hover:border-terra hover:bg-terra/10'}`}>
+                    <button
+                      key={index}
+                      onClick={() => setPriceRange({ min: range.min, max: range.max })}
+                      className={`w-full text-left px-3 py-2 border-2 transition-colors ${
+                        priceRange.min === range.min && priceRange.max === range.max
+                          ? 'bg-terra text-white border-terra'
+                          : 'border-transparent hover:border-terra hover:bg-terra/10'
+                      }`}
+                    >
                       {range.label}
                     </button>
                   ))}
                 </div>
+                
+                {/* Custom Range */}
                 <div className="mt-4 space-y-3">
                   <div className="flex space-x-2">
-                    <input type="number" placeholder="Min" value={priceRange.min} onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })} className="w-1/2 px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra" />
-                    <input type="number" placeholder="Max" value={priceRange.max} onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })} className="w-1/2 px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra" />
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={priceRange.min}
+                      onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
+                      className="w-1/2 px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={priceRange.max}
+                      onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
+                      className="w-1/2 px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
+                    />
                   </div>
                 </div>
               </div>
@@ -232,9 +309,33 @@ const Products = () => {
                 <div className="mt-6 pt-6 border-t-2 border-black">
                   <h3 className="text-sm font-semibold text-black mb-3">Active Filters</h3>
                   <div className="flex flex-wrap gap-2">
-                    {searchTerm && (<button onClick={() => setSearchTerm('')} className="inline-flex items-center space-x-1 px-2 py-1 bg-terra/10 text-terra border border-terra text-sm"><span>Search: {searchTerm}</span><FiX className="w-3 h-3" /></button>)}
-                    {selectedCategory !== 'all' && (<button onClick={() => setSelectedCategory('all')} className="inline-flex items-center space-x-1 px-2 py-1 bg-terra/10 text-terra border border-terra text-sm"><span>Category: {selectedCategory}</span><FiX className="w-3 h-3" /></button>)}
-                    {(priceRange.min > 0 || priceRange.max < 100000) && (<button onClick={() => setPriceRange({ min: 0, max: 100000 })} className="inline-flex items-center space-x-1 px-2 py-1 bg-terra/10 text-terra border border-terra text-sm"><span>Price: KSh {priceRange.min} - {priceRange.max}</span><FiX className="w-3 h-3" /></button>)}
+                    {searchTerm && (
+                      <button
+                        onClick={() => setSearchTerm('')}
+                        className="inline-flex items-center space-x-1 px-2 py-1 bg-terra/10 text-terra border border-terra text-sm"
+                      >
+                        <span>Search: {searchTerm}</span>
+                        <FiX className="w-3 h-3" />
+                      </button>
+                    )}
+                    {selectedCategory !== 'all' && (
+                      <button
+                        onClick={() => setSelectedCategory('all')}
+                        className="inline-flex items-center space-x-1 px-2 py-1 bg-terra/10 text-terra border border-terra text-sm"
+                      >
+                        <span>Category: {selectedCategory}</span>
+                        <FiX className="w-3 h-3" />
+                      </button>
+                    )}
+                    {(priceRange.min > 0 || priceRange.max < 100000) && (
+                      <button
+                        onClick={() => setPriceRange({ min: 0, max: 100000 })}
+                        className="inline-flex items-center space-x-1 px-2 py-1 bg-terra/10 text-terra border border-terra text-sm"
+                      >
+                        <span>Price: KSh {priceRange.min} - {priceRange.max}</span>
+                        <FiX className="w-3 h-3" />
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
@@ -243,19 +344,45 @@ const Products = () => {
 
           {/* Products Grid */}
           <div className="flex-1">
-            {/* Toolbar */}
+            {/* Toolbar with Sort and View Toggle */}
             <div className="bg-white border-4 border-black shadow-hard-sm p-4 mb-6">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="text-ash font-semibold text-sm sm:text-base">
                   Showing {sortedProducts.length > 0 ? startIndex + 1 : 0} - {Math.min(startIndex + itemsPerPage, sortedProducts.length)} of {sortedProducts.length} products
                 </div>
+                
                 <div className="flex items-center space-x-4">
-                  <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="px-3 sm:px-4 py-2 text-sm sm:text-base border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra">
-                    {sortOptions.map(option => (<option key={option.value} value={option.value}>{option.label}</option>))}
+                  {/* Sort Dropdown */}
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="px-3 sm:px-4 py-2 text-sm sm:text-base border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
+                  >
+                    {sortOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
                   </select>
+
+                  {/* View Toggle */}
                   <div className="flex border-2 border-black overflow-hidden">
-                    <button onClick={() => setViewMode('grid')} className={`p-2 transition-colors ${viewMode === 'grid' ? 'bg-terra text-white' : 'hover:bg-terra/10'}`}><FiGrid className="w-5 h-5" /></button>
-                    <button onClick={() => setViewMode('list')} className={`p-2 transition-colors ${viewMode === 'list' ? 'bg-terra text-white' : 'hover:bg-terra/10'}`}><FiList className="w-5 h-5" /></button>
+                    <button
+                      onClick={() => setViewMode('grid')}
+                      className={`p-2 transition-colors ${
+                        viewMode === 'grid' ? 'bg-terra text-white' : 'hover:bg-terra/10'
+                      }`}
+                    >
+                      <FiGrid className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => setViewMode('list')}
+                      className={`p-2 transition-colors ${
+                        viewMode === 'list' ? 'bg-terra text-white' : 'hover:bg-terra/10'
+                      }`}
+                    >
+                      <FiList className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -267,7 +394,12 @@ const Products = () => {
                 <div className="text-6xl mb-4">🔍</div>
                 <h3 className="font-h text-xl font-bold text-black mb-2">No products found</h3>
                 <p className="text-ash mb-4">Try adjusting your filters or search terms</p>
-                <button onClick={clearFilters} className="px-6 py-2 bg-terra text-white border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">Clear All Filters</button>
+                <button
+                  onClick={clearFilters}
+                  className="px-6 py-2 bg-terra text-white border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                >
+                  Clear All Filters
+                </button>
               </div>
             )}
 
@@ -275,9 +407,18 @@ const Products = () => {
             {viewMode === 'grid' && paginatedProducts.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                 {paginatedProducts.map((product) => (
-                  <div key={product.id} className="group bg-white border-4 border-black shadow-hard-sm overflow-hidden hover:-translate-y-2 transition-all duration-300" onMouseEnter={() => setHoveredProduct(product.id)} onMouseLeave={() => setHoveredProduct(null)}>
+                  <div
+                    key={product.id}
+                    className="group bg-white border-4 border-black shadow-hard-sm overflow-hidden hover:-translate-y-2 transition-all duration-300"
+                    onMouseEnter={() => setHoveredProduct(product.id)}
+                    onMouseLeave={() => setHoveredProduct(null)}
+                  >
                     <div className="relative overflow-hidden aspect-square border-b-4 border-black">
-                      <img src={product.image_url || `https://placehold.co/400x400/D6B896/121518?text=${(product.name || 'Product').substring(0, 15)}`} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                      <img
+                        src={product.image_url || `https://placehold.co/400x400/D6B896/121518?text=${(product.name || 'Product').substring(0, 15)}`}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
                       <div className={`absolute inset-0 bg-black/60 items-center justify-center space-x-3 transition-opacity duration-300 ${hoveredProduct === product.id ? 'md:flex' : 'md:hidden'} hidden`}>
                         <button onClick={() => handleAddToCart(product)} className="p-2 bg-terra text-white border-2 border-black hover:bg-terra-dark"><FiShoppingCart className="w-5 h-5" /></button>
                         <button onClick={() => toggleWishlist(product.id)} className={`p-2 border-2 transition-colors ${wishlist.includes(product.id) ? 'bg-terra text-white border-terra' : 'bg-white text-terra border-black hover:bg-terra hover:text-white'}`}><FiHeart className="w-5 h-5" /></button>
@@ -347,7 +488,13 @@ const Products = () => {
             {totalPages > 1 && (
               <div className="mt-8 flex justify-center">
                 <div className="flex space-x-1 sm:space-x-2">
-                  <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="px-3 sm:px-4 py-2 border-4 border-black hover:bg-terra/10 disabled:opacity-50 disabled:cursor-not-allowed"><FiChevronLeft className="w-5 h-5" /></button>
+                  <button
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-3 sm:px-4 py-2 border-4 border-black hover:bg-terra/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FiChevronLeft className="w-5 h-5" />
+                  </button>
                   {[...Array(totalPages)].map((_, i) => {
                     const pageNumber = i + 1;
                     if (pageNumber === 1 || pageNumber === totalPages || (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)) {
@@ -357,7 +504,13 @@ const Products = () => {
                     }
                     return null;
                   })}
-                  <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="px-3 sm:px-4 py-2 border-4 border-black hover:bg-terra/10 disabled:opacity-50 disabled:cursor-not-allowed"><FiChevronRight className="w-5 h-5" /></button>
+                  <button
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-3 sm:px-4 py-2 border-4 border-black hover:bg-terra/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <FiChevronRight className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
             )}

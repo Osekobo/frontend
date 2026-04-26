@@ -57,6 +57,15 @@
   .body-no-scroll {
     @apply overflow-hidden;
   }
+  
+  /* Marquee animation */
+  .animate-marquee {
+    animation: marquee 25s linear infinite;
+  }
+  
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
 }
 
 /* Your existing animations and styles remain */
@@ -86,6 +95,16 @@
 
 .animate-bounce {
   animation: bounce 0.5s ease-in-out;
+}
+
+/* Marquee Keyframes */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* Smooth scrolling */
@@ -263,6 +282,8 @@ html {
   background: repeating-linear-gradient(90deg, var(--c-terra) 0, var(--c-terra) 24px, transparent 24px, transparent 36px);
   width: 100%;
   max-width: 120px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .brick-line-large {
@@ -270,6 +291,8 @@ html {
   background: repeating-linear-gradient(90deg, var(--c-terra) 0, var(--c-terra) 32px, transparent 32px, transparent 48px);
   width: 100%;
   max-width: 160px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Hard Shadow Utility (like Kione's design) */

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import toast, { Toaster } from 'react-hot-toast';  // Add this import
+import toast, { Toaster } from 'react-hot-toast';
 import useProductStore from '../store/productStore';
 import useCartStore from '../store/cartStore';
 import useAuthStore from '../store/authStore';
@@ -14,7 +14,10 @@ import {
   FiShare2,
   FiMinus,
   FiPlus,
-  FiChevronLeft
+  FiChevronLeft,
+  FiMapPin,
+  FiClock,
+  FiCheckCircle
 } from 'react-icons/fi';
 
 const ProductDetail = () => {
@@ -75,8 +78,8 @@ const ProductDetail = () => {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-warm flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-terra"></div>
       </div>
     );
   }
@@ -89,9 +92,21 @@ const ProductDetail = () => {
     `https://picsum.photos/seed/${product.id}3/600/600`,
   ];
 
+  // Get category display name
+  const getCategoryName = (category) => {
+    const categories = {
+      building: 'Building Materials',
+      paints: 'Paints',
+      hardware: 'Hardware Tools',
+      plumbing: 'Plumbing',
+      electrical: 'Electrical',
+      general: 'General Store'
+    };
+    return categories[category] || category;
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Add Toaster component here for toast notifications */}
+    <div className="min-h-screen bg-warm">
       <Toaster 
         position="top-right"
         toastOptions={{
@@ -103,7 +118,7 @@ const ProductDetail = () => {
           success: {
             duration: 3000,
             iconTheme: {
-              primary: '#10B981',
+              primary: '#E04E00',
               secondary: '#fff',
             },
           },
@@ -121,17 +136,17 @@ const ProductDetail = () => {
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
-          className="mb-6 flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
+          className="mb-6 flex items-center space-x-2 text-black hover:text-terra transition-colors group"
         >
-          <FiChevronLeft className="w-5 h-5" />
-          <span>Back to Products</span>
+          <FiChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          <span className="font-semibold">Back to Products</span>
         </button>
 
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white border-4 border-black shadow-hard-lg overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 lg:p-8">
             {/* Product Images */}
             <div>
-              <div className="mb-4 overflow-hidden rounded-xl bg-gray-100">
+              <div className="mb-4 overflow-hidden border-4 border-black bg-sand/20">
                 <img
                   src={productImages[selectedImage]}
                   alt={product.name}
@@ -143,7 +158,7 @@ const ProductDetail = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`overflow-hidden rounded-lg border-2 transition-all ${selectedImage === index ? 'border-blue-600' : 'border-transparent'
+                    className={`overflow-hidden border-4 transition-all ${selectedImage === index ? 'border-terra' : 'border-black hover:border-terra/50'
                       }`}
                   >
                     <img
@@ -159,7 +174,14 @@ const ProductDetail = () => {
             {/* Product Info */}
             <div>
               <div className="mb-4">
-                <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
+                {/* Category Badge */}
+                <div className="inline-block mb-3">
+                  <span className="bg-terra/10 text-terra text-xs font-bold uppercase tracking-wider px-3 py-1 border border-terra">
+                    {getCategoryName(product.category)}
+                  </span>
+                </div>
+                
+                <h1 className="font-h text-3xl lg:text-4xl font-bold text-black mb-2">
                   {product.name}
                 </h1>
 
@@ -168,54 +190,61 @@ const ProductDetail = () => {
                     {[...Array(5)].map((_, i) => (
                       <FiStar
                         key={i}
-                        className={`w-5 h-5 ${i < 4 ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                        className={`w-5 h-5 ${i < 4 ? 'text-yellow-500 fill-current' : 'text-gray-300'
                           }`}
                       />
                     ))}
-                    <span className="ml-2 text-gray-600">(124 reviews)</span>
+                    <span className="ml-2 text-ash">(124 reviews)</span>
                   </div>
-                  <div className="text-gray-400">|</div>
-                  {/* Stock display removed - no longer showing "X in stock" */}
+                  {product.stock > 0 && (
+                    <div className="flex items-center text-green-600">
+                      <FiCheckCircle className="w-4 h-4 mr-1" />
+                      <span className="text-sm font-semibold">In Stock</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mb-4">
-                  <span className="text-3xl font-bold text-blue-600">
+                  <span className="font-h text-3xl font-bold text-terra">
                     KSh {product.price.toLocaleString()}
                   </span>
                   {product.old_price && (
-                    <span className="ml-2 text-lg text-gray-400 line-through">
+                    <span className="ml-2 text-lg text-ash line-through">
                       KSh {product.old_price.toLocaleString()}
                     </span>
                   )}
                 </div>
 
-                <p className="text-gray-600 leading-relaxed mb-6">
+                <p className="text-ash leading-relaxed mb-6">
                   {product.description}
                 </p>
 
                 {/* Quantity Selector */}
                 <div className="mb-6">
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
                     Quantity
                   </label>
                   <div className="flex items-center space-x-3">
                     <button
                       onClick={() => handleQuantityChange(-1)}
                       disabled={quantity <= 1}
-                      className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-2 border-4 border-black bg-white hover:bg-terra/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       <FiMinus className="w-5 h-5" />
                     </button>
-                    <span className="text-xl font-semibold w-12 text-center">
+                    <span className="text-xl font-bold w-12 text-center text-black">
                       {quantity}
                     </span>
                     <button
                       onClick={() => handleQuantityChange(1)}
                       disabled={quantity >= product.stock}
-                      className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-2 border-4 border-black bg-white hover:bg-terra/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       <FiPlus className="w-5 h-5" />
                     </button>
+                    <span className="text-sm text-ash ml-2">
+                      {product.stock} available
+                    </span>
                   </div>
                 </div>
 
@@ -224,17 +253,18 @@ const ProductDetail = () => {
                   <button
                     onClick={handleAddToCart}
                     disabled={product.stock === 0}
-                    className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                    className="flex-1 bg-terra text-white py-3 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 flex items-center justify-center space-x-2"
                   >
                     <FiShoppingCart className="w-5 h-5" />
                     <span>{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
                   </button>
                   <button
                     onClick={toggleWishlist}
-                    className={`px-6 py-3 rounded-lg font-semibold border-2 transition-colors flex items-center justify-center space-x-2 ${inWishlist
-                      ? 'bg-red-50 border-red-500 text-red-600'
-                      : 'border-gray-300 hover:border-red-500 hover:text-red-600'
-                      }`}
+                    className={`px-6 py-3 font-bold uppercase tracking-wider border-4 transition-all flex items-center justify-center space-x-2 ${
+                      inWishlist
+                        ? 'bg-terra text-white border-terra'
+                        : 'border-black hover:border-terra hover:text-terra'
+                    }`}
                   >
                     <FiHeart className={`w-5 h-5 ${inWishlist ? 'fill-current' : ''}`} />
                     <span>{inWishlist ? 'In Wishlist' : 'Add to Wishlist'}</span>
@@ -246,26 +276,44 @@ const ProductDetail = () => {
                       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
                       window.open(whatsappUrl, '_blank');
                     }}
-                    className="px-6 py-3 rounded-lg font-semibold border-2 border-gray-300 hover:border-green-600 hover:text-green-600 transition-colors flex items-center justify-center space-x-2"
+                    className="px-6 py-3 font-bold uppercase tracking-wider border-4 border-black hover:border-terra hover:text-terra transition-all flex items-center justify-center space-x-2"
                   >
                     <FiShare2 className="w-5 h-5" />
-                    <span>Share on WhatsApp</span>
+                    <span>Share</span>
                   </button>
                 </div>
 
-                {/* Shipping Info */}
-                <div className="border-t border-gray-200 pt-6 space-y-3">
+                {/* Delivery & Payment Info */}
+                <div className="border-t-4 border-black pt-6 space-y-3">
                   <div className="flex items-center space-x-3">
-                    <FiTruck className="w-5 h-5 text-blue-600" />
-                    <span className="text-sm text-gray-600">Free delivery on orders over KSh 5,000</span>
+                    <div className="bg-terra/10 p-2 border border-terra">
+                      <FiTruck className="w-5 h-5 text-terra" />
+                    </div>
+                    <span className="text-sm text-black font-semibold">Free delivery on orders over KSh 5,000</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <FiShield className="w-5 h-5 text-blue-600" />
-                    <span className="text-sm text-gray-600">Secure payment with M-Pesa</span>
+                    <div className="bg-terra/10 p-2 border border-terra">
+                      <FiShield className="w-5 h-5 text-terra" />
+                    </div>
+                    <span className="text-sm text-black font-semibold">Secure payment with M-Pesa</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <FiRefreshCw className="w-5 h-5 text-blue-600" />
-                    <span className="text-sm text-gray-600">30-day money-back guarantee</span>
+                    <div className="bg-terra/10 p-2 border border-terra">
+                      <FiRefreshCw className="w-5 h-5 text-terra" />
+                    </div>
+                    <span className="text-sm text-black font-semibold">30-day money-back guarantee</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-terra/10 p-2 border border-terra">
+                      <FiMapPin className="w-5 h-5 text-terra" />
+                    </div>
+                    <span className="text-sm text-black font-semibold">Located on A1 Highway, Migori</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-terra/10 p-2 border border-terra">
+                      <FiClock className="w-5 h-5 text-terra" />
+                    </div>
+                    <span className="text-sm text-black font-semibold">Same-day pickup available</span>
                   </div>
                 </div>
               </div>
@@ -275,9 +323,15 @@ const ProductDetail = () => {
 
         {/* Related Products Section */}
         <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">You Might Also Like</h2>
+          <div className="text-center mb-6">
+            <h2 className="font-h text-2xl md:text-3xl font-bold text-black uppercase mb-2">You Might Also Like</h2>
+            <div className="brick-line mx-auto"></div>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Add related products here - would come from backend */}
+            <div className="bg-white border-4 border-black shadow-hard-sm p-8 text-center">
+              <p className="text-ash">More products coming soon!</p>
+            </div>
           </div>
         </div>
       </div>

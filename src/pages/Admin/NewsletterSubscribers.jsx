@@ -13,7 +13,9 @@ import {
   FiSearch,
   FiX,
   FiUserCheck,
-  FiUserX
+  FiUserX,
+  FiTrendingUp,
+  FiShield
 } from 'react-icons/fi';
 
 const NewsletterSubscribers = () => {
@@ -28,7 +30,7 @@ const NewsletterSubscribers = () => {
   const [emailData, setEmailData] = useState({
     subject: '',
     message: '',
-    sendTo: 'all' // 'all', 'selected', 'single'
+    sendTo: 'all'
   });
   const [notification, setNotification] = useState({ show: false, type: '', message: '' });
 
@@ -38,7 +40,6 @@ const NewsletterSubscribers = () => {
   }, []);
 
   useEffect(() => {
-    // Filter subscribers based on search term
     if (searchTerm) {
       const filtered = subscribers.filter(sub => 
         sub.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -180,7 +181,6 @@ const NewsletterSubscribers = () => {
 
     setIsSending(true);
     try {
-      // You'll need to create this endpoint in your backend
       await api.post('/newsletter/send', {
         recipients,
         subject: emailData.subject,
@@ -211,304 +211,304 @@ const NewsletterSubscribers = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="flex justify-center items-center h-64 bg-warm">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-terra"></div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-8">
-      {/* Notification */}
-      {notification.show && (
-        <div className={`fixed top-20 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
-          notification.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-        }`}>
-          {notification.type === 'success' ? (
-            <FiCheckCircle className="w-5 h-5" />
-          ) : (
-            <FiAlertCircle className="w-5 h-5" />
-          )}
-          <span>{notification.message}</span>
-        </div>
-      )}
+    <div className="min-h-screen bg-warm py-8 px-4">
+      <div className="container mx-auto max-w-7xl">
+        {/* Notification */}
+        {notification.show && (
+          <div className={`fixed top-20 right-4 z-50 p-4 border-4 shadow-hard-sm flex items-center space-x-2 ${
+            notification.type === 'success' ? 'bg-green-500 text-white border-black' : 'bg-red-500 text-white border-black'
+          }`}>
+            {notification.type === 'success' ? (
+              <FiCheckCircle className="w-5 h-5" />
+            ) : (
+              <FiAlertCircle className="w-5 h-5" />
+            )}
+            <span>{notification.message}</span>
+          </div>
+        )}
 
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">Newsletter Management</h1>
-          <p className="text-gray-600 mt-1">Manage your subscribers and send email campaigns</p>
+        {/* Page Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-terra border-4 border-black shadow-hard-sm mb-4">
+            <FiMail className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="font-h text-3xl md:text-4xl font-bold text-black uppercase mb-2">Newsletter Management</h1>
+          <div className="brick-line mx-auto"></div>
+          <p className="text-ash mt-2">Manage your subscribers and send email campaigns</p>
         </div>
-        <div className="flex space-x-3">
-          <button
-            onClick={handleExportCSV}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
-          >
-            <FiDownload className="w-5 h-5" />
-            <span>Export CSV</span>
-          </button>
-          <button
-            onClick={fetchSubscribers}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-          >
-            <FiRefreshCw className="w-5 h-5" />
-            <span>Refresh</span>
-          </button>
-        </div>
-      </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100">Total Subscribers</p>
-              <p className="text-3xl font-bold mt-2">{count}</p>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white border-4 border-black shadow-hard-sm p-6 text-center hover:-translate-y-1 transition-all">
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-terra border-4 border-black mb-3">
+              <FiUsers className="w-6 h-6 text-white" />
             </div>
-            <FiUsers className="w-12 h-12 text-blue-200" />
+            <p className="text-ash text-sm uppercase tracking-wider">Total Subscribers</p>
+            <p className="font-h text-3xl font-bold text-black mt-1">{count}</p>
+          </div>
+          <div className="bg-white border-4 border-black shadow-hard-sm p-6 text-center hover:-translate-y-1 transition-all">
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-terra border-4 border-black mb-3">
+              <FiSend className="w-6 h-6 text-white" />
+            </div>
+            <p className="text-ash text-sm uppercase tracking-wider">Active Campaigns</p>
+            <p className="font-h text-3xl font-bold text-black mt-1">0</p>
+          </div>
+          <div className="bg-white border-4 border-black shadow-hard-sm p-6 text-center hover:-translate-y-1 transition-all">
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-terra border-4 border-black mb-3">
+              <FiTrendingUp className="w-6 h-6 text-white" />
+            </div>
+            <p className="text-ash text-sm uppercase tracking-wider">Open Rate</p>
+            <p className="font-h text-3xl font-bold text-black mt-1">0%</p>
           </div>
         </div>
-        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100">Active Campaigns</p>
-              <p className="text-3xl font-bold mt-2">0</p>
-            </div>
-            <FiSend className="w-12 h-12 text-green-200" />
-          </div>
-        </div>
-        <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100">Open Rate</p>
-              <p className="text-3xl font-bold mt-2">0%</p>
-            </div>
-            <FiMail className="w-12 h-12 text-purple-200" />
-          </div>
-        </div>
-      </div>
 
-      {/* Actions Bar */}
-      <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-        <div className="flex space-x-3">
-          {selectedEmails.length > 0 && (
-            <>
+        {/* Actions Bar */}
+        <div className="bg-white border-4 border-black shadow-hard-sm p-4 mb-6">
+          <div className="flex justify-between items-center flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
+              {selectedEmails.length > 0 && (
+                <>
+                  <button
+                    onClick={() => openEmailModal('selected')}
+                    className="bg-terra text-white px-4 py-2 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center space-x-2"
+                  >
+                    <FiSend className="w-5 h-5" />
+                    <span>Send to Selected ({selectedEmails.length})</span>
+                  </button>
+                  <button
+                    onClick={handleBulkDelete}
+                    className="bg-red-600 text-white px-4 py-2 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center space-x-2"
+                  >
+                    <FiTrash2 className="w-5 h-5" />
+                    <span>Delete Selected</span>
+                  </button>
+                </>
+              )}
               <button
-                onClick={() => openEmailModal('selected')}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+                onClick={() => openEmailModal('all')}
+                className="bg-terra text-white px-4 py-2 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center space-x-2"
               >
                 <FiSend className="w-5 h-5" />
-                <span>Send to Selected ({selectedEmails.length})</span>
+                <span>Send to All</span>
               </button>
               <button
-                onClick={handleBulkDelete}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-2"
+                onClick={handleExportCSV}
+                className="bg-terra text-white px-4 py-2 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center space-x-2"
               >
-                <FiTrash2 className="w-5 h-5" />
-                <span>Delete Selected</span>
+                <FiDownload className="w-5 h-5" />
+                <span>Export CSV</span>
               </button>
-            </>
-          )}
-          <button
-            onClick={() => openEmailModal('all')}
-            className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2"
-          >
-            <FiSend className="w-5 h-5" />
-            <span>Send to All</span>
-          </button>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative">
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search subscribers..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64"
-          />
-        </div>
-      </div>
-
-      {/* Subscribers Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left">
-                <input
-                  type="checkbox"
-                  checked={selectedEmails.length === filteredSubscribers.length && filteredSubscribers.length > 0}
-                  onChange={handleSelectAll}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subscribed Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredSubscribers.length === 0 ? (
-              <tr>
-                <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
-                  <FiMail className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-                  <p>No subscribers found</p>
-                </td>
-              </tr>
-            ) : (
-              filteredSubscribers.map((subscriber) => (
-                <tr key={subscriber.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedEmails.includes(subscriber.email)}
-                      onChange={() => handleSelectEmail(subscriber.email)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{subscriber.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <FiMail className="w-4 h-4 text-gray-400 mr-2" />
-                      <span className="text-sm text-gray-900">{subscriber.email}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div className="flex items-center">
-                      <FiCalendar className="w-4 h-4 text-gray-400 mr-2" />
-                      {new Date(subscriber.subscribed_at).toLocaleDateString()}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                      Active
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => {
-                          setSelectedEmails([subscriber.email]);
-                          openEmailModal('single');
-                        }}
-                        className="text-blue-600 hover:text-blue-900"
-                        title="Send Email"
-                      >
-                        <FiSend className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteSubscriber(subscriber.email)}
-                        className="text-red-600 hover:text-red-900"
-                        title="Remove Subscriber"
-                      >
-                        <FiTrash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Email Modal */}
-      {showEmailModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-800">Send Newsletter Email</h2>
               <button
-                onClick={() => setShowEmailModal(false)}
-                className="text-gray-400 hover:text-gray-600"
+                onClick={fetchSubscribers}
+                className="bg-terra text-white px-4 py-2 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all flex items-center space-x-2"
               >
-                <FiX className="w-6 h-6" />
+                <FiRefreshCw className="w-5 h-5" />
+                <span>Refresh</span>
               </button>
             </div>
 
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Recipients
-                </label>
-                <div className="bg-gray-100 rounded-lg p-3">
-                  {emailData.sendTo === 'all' && (
-                    <p className="text-gray-700">All subscribers ({subscribers.length} recipients)</p>
-                  )}
-                  {emailData.sendTo === 'selected' && (
-                    <p className="text-gray-700">{selectedEmails.length} selected subscribers</p>
-                  )}
-                  {emailData.sendTo === 'single' && (
-                    <p className="text-gray-700">Single subscriber: {selectedEmails[0]}</p>
-                  )}
+            {/* Search Bar */}
+            <div className="relative">
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-ash" />
+              <input
+                type="text"
+                placeholder="Search subscribers..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra w-64"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Subscribers Table */}
+        <div className="bg-white border-4 border-black shadow-hard-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y-2 divide-black">
+              <thead className="bg-terra/10">
+                <tr>
+                  <th className="px-6 py-3 text-left">
+                    <input
+                      type="checkbox"
+                      checked={selectedEmails.length === filteredSubscribers.length && filteredSubscribers.length > 0}
+                      onChange={handleSelectAll}
+                      className="w-4 h-4 border-2 border-black accent-terra"
+                    />
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">ID</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">Subscribed Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-black uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y-2 divide-black">
+                {filteredSubscribers.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-12 text-center text-ash">
+                      <FiMail className="w-12 h-12 mx-auto mb-3 text-ash" />
+                      <p>No subscribers found</p>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredSubscribers.map((subscriber) => (
+                    <tr key={subscriber.id} className="hover:bg-terra/5 transition-colors">
+                      <td className="px-6 py-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedEmails.includes(subscriber.email)}
+                          onChange={() => handleSelectEmail(subscriber.email)}
+                          className="w-4 h-4 border-2 border-black accent-terra"
+                        />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ash">{subscriber.id}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <FiMail className="w-4 h-4 text-terra mr-2" />
+                          <span className="text-sm text-black">{subscriber.email}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-ash">
+                        <div className="flex items-center">
+                          <FiCalendar className="w-4 h-4 text-terra mr-2" />
+                          {new Date(subscriber.subscribed_at).toLocaleDateString()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="px-2 py-1 text-xs font-bold uppercase bg-green-100 text-green-800 border border-green-500">
+                          Active
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => {
+                              setSelectedEmails([subscriber.email]);
+                              openEmailModal('single');
+                            }}
+                            className="text-terra hover:text-terra-dark transition-colors"
+                            title="Send Email"
+                          >
+                            <FiSend className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteSubscriber(subscriber.email)}
+                            className="text-red-600 hover:text-red-700 transition-colors"
+                            title="Remove Subscriber"
+                          >
+                            <FiTrash2 className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Email Modal */}
+        {showEmailModal && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <div className="bg-white border-4 border-black shadow-hard-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="flex justify-between items-center p-6 border-b-4 border-black">
+                <h2 className="font-h text-2xl font-bold text-black uppercase">Send Newsletter Email</h2>
+                <button
+                  onClick={() => setShowEmailModal(false)}
+                  className="text-ash hover:text-terra transition-colors"
+                >
+                  <FiX className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
+                    Recipients
+                  </label>
+                  <div className="bg-terra/5 border-2 border-terra p-3">
+                    {emailData.sendTo === 'all' && (
+                      <p className="text-black font-semibold">All subscribers ({subscribers.length} recipients)</p>
+                    )}
+                    {emailData.sendTo === 'selected' && (
+                      <p className="text-black font-semibold">{selectedEmails.length} selected subscribers</p>
+                    )}
+                    {emailData.sendTo === 'single' && (
+                      <p className="text-black font-semibold">Single subscriber: {selectedEmails[0]}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
+                    Subject *
+                  </label>
+                  <input
+                    type="text"
+                    value={emailData.subject}
+                    onChange={(e) => setEmailData({ ...emailData, subject: e.target.value })}
+                    placeholder="Enter email subject"
+                    className="w-full px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
+                    Message *
+                  </label>
+                  <textarea
+                    value={emailData.message}
+                    onChange={(e) => setEmailData({ ...emailData, message: e.target.value })}
+                    placeholder="Enter your email message here..."
+                    rows="8"
+                    className="w-full px-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra resize-none"
+                  />
+                </div>
+
+                <div className="bg-terra/5 border-2 border-terra p-4">
+                  <p className="text-sm text-black">
+                    <strong className="text-terra">💡 Tip:</strong> Personalize your message by using placeholders like {'{name}'} or {'{email}'} that will be replaced automatically.
+                  </p>
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Subject *
-                </label>
-                <input
-                  type="text"
-                  value={emailData.subject}
-                  onChange={(e) => setEmailData({ ...emailData, subject: e.target.value })}
-                  placeholder="Enter email subject"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+              <div className="flex justify-end space-x-3 p-6 border-t-4 border-black">
+                <button
+                  onClick={() => setShowEmailModal(false)}
+                  className="px-4 py-2 bg-gray-300 text-black font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:bg-gray-400 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSendEmail}
+                  disabled={isSending}
+                  className="px-4 py-2 bg-terra text-white font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                >
+                  {isSending ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FiSend className="w-5 h-5" />
+                      <span>Send Email</span>
+                    </>
+                  )}
+                </button>
               </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Message *
-                </label>
-                <textarea
-                  value={emailData.message}
-                  onChange={(e) => setEmailData({ ...emailData, message: e.target.value })}
-                  placeholder="Enter your email message here..."
-                  rows="8"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                />
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-800">
-                  <strong>Tip:</strong> Personalize your message by using placeholders like {'{name}'} or {'{email}'} that will be replaced automatically.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex justify-end space-x-3 p-6 border-t border-gray-200">
-              <button
-                onClick={() => setShowEmailModal(false)}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSendEmail}
-                disabled={isSending}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400 flex items-center space-x-2"
-              >
-                {isSending ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    <span>Sending...</span>
-                  </>
-                ) : (
-                  <>
-                    <FiSend className="w-5 h-5" />
-                    <span>Send Email</span>
-                  </>
-                )}
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
