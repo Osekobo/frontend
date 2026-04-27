@@ -1,7 +1,7 @@
 // src/pages/ForgotPassword.jsx
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FiMail, FiArrowLeft } from 'react-icons/fi';
+import { FiMail, FiArrowLeft, FiShield, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import api from '../api/client';
 
 const ForgotPassword = () => {
@@ -32,91 +32,142 @@ const ForgotPassword = () => {
 
   if (isEmailSent) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8 text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-            <FiMail className="h-6 w-6 text-green-600" />
+      <div className="min-h-screen bg-warm flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full">
+          <div className="bg-white border-4 border-black shadow-hard-lg p-8 text-center">
+            <div className="mx-auto flex items-center justify-center w-20 h-20 bg-terra/10 border-4 border-terra mb-6">
+              <FiMail className="h-10 w-10 text-terra" />
+            </div>
+            <h2 className="font-h text-2xl font-bold text-black uppercase mb-2">Check Your Email</h2>
+            <div className="brick-line mx-auto mb-4"></div>
+            <p className="text-ash mb-4">
+              We've sent a password reset code to <strong className="text-terra">{email}</strong>
+            </p>
+            <p className="text-sm text-ash mb-6">
+              Enter the code on the next page to reset your password.
+            </p>
+            <button
+              onClick={() => navigate('/reset-password')}
+              className="w-full bg-terra text-white py-3 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+            >
+              Enter Reset Code
+            </button>
+            <button
+              onClick={() => {
+                setIsEmailSent(false);
+                setEmail('');
+              }}
+              className="w-full mt-3 text-terra hover:text-terra-dark text-sm font-semibold transition-colors"
+            >
+              ← Back to forgot password
+            </button>
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Check Your Email</h2>
-          <p className="text-gray-600 mb-4">
-            We've sent a password reset code to <strong>{email}</strong>
-          </p>
-          <p className="text-sm text-gray-500 mb-6">
-            Enter the code on the next page to reset your password.
-          </p>
-          <button
-            onClick={() => navigate('/reset-password')}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Enter Reset Code
-          </button>
-          <button
-            onClick={() => {
-              setIsEmailSent(false);
-              setEmail('');
-            }}
-            className="w-full mt-3 text-gray-600 hover:text-gray-800 text-sm"
-          >
-            ← Back to forgot password
-          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <div className="text-center mb-6">
-          <Link to="/login" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-800">
-            <FiArrowLeft className="mr-2" /> Back to Login
-          </Link>
+    <div className="min-h-screen bg-warm flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-terra border-4 border-black shadow-hard-sm mb-4">
+            <FiShield className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="font-h text-3xl font-bold text-black uppercase tracking-tight">Forgot Password?</h1>
+          <div className="brick-line mx-auto mt-4"></div>
         </div>
 
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">
-          Forgot Password?
-        </h2>
-        <p className="text-center text-gray-600 mb-6">
-          Enter your email address and we'll send you a code to reset your password.
-        </p>
-
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+        {/* Forgot Password Card */}
+        <div className="bg-white border-4 border-black shadow-hard-lg p-8">
+          <div className="text-center mb-6">
+            <Link to="/login" className="inline-flex items-center text-sm text-terra hover:text-terra-dark font-semibold transition-colors group">
+              <FiArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Login
+            </Link>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="you@example.com"
-              required
+          <h2 className="font-h text-2xl font-bold text-black text-center uppercase mb-2">
+            Reset Your Password
+          </h2>
+          <p className="text-ash text-center mb-6">
+            Enter your email address and we'll send you a code to reset your password.
+          </p>
+
+          {error && (
+            <div className="bg-red-100 border-2 border-red-500 text-red-700 px-4 py-3 mb-4 flex items-start space-x-2">
+              <FiAlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold">Error</p>
+                <p className="text-sm">{error}</p>
+              </div>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiMail className="h-5 w-5 text-ash" />
+                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
+                  placeholder="you@example.com"
+                  required
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
               disabled={isLoading}
-            />
+              className="w-full bg-terra text-white py-3 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+            >
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                  <span>Sending...</span>
+                </>
+              ) : (
+                <>
+                  <FiMail className="w-5 h-5" />
+                  <span>Send Reset Code</span>
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t-2 border-black"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-ash">Remember your password?</span>
+              </div>
+            </div>
+            <div className="mt-4">
+              <Link to="/login" className="text-terra hover:text-terra-dark font-bold uppercase tracking-wider transition-colors">
+                Back to Login
+              </Link>
+            </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400 font-semibold"
-          >
-            {isLoading ? 'Sending...' : 'Send Reset Code'}
-          </button>
-        </form>
-
-        <p className="text-center text-gray-600 mt-6">
-          Remember your password?{' '}
-          <Link to="/login" className="text-blue-600 hover:text-blue-700 font-semibold">
-            Back to Login
-          </Link>
-        </p>
+          {/* Security Note */}
+          <div className="mt-6 pt-6 border-t-2 border-black text-center">
+            <p className="text-xs text-ash flex items-center justify-center space-x-1">
+              <FiShield className="w-3 h-3 text-terra" />
+              <span>Your information is secure</span>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
