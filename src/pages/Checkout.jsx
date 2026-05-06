@@ -262,7 +262,7 @@ const Checkout = () => {
             Authorization: `Bearer ${token}`, // ← THIS WAS MISSING!
           },
           body: JSON.stringify({
-            amount: Math.ceil(grandTotal), // Round up to whole number
+            amount: grandTotal, // Round up to whole number
             phone_number: formattedPhone, // Use formatted phone
             order_id: orderId,
           }),
