@@ -21,6 +21,7 @@ import {
   FiTruck,
   FiArrowLeft,
 } from "react-icons/fi";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8001";
 
 const Checkout = () => {
   const [phone, setPhone] = useState("");
@@ -38,7 +39,6 @@ const Checkout = () => {
   });
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [checkoutRequestId, setCheckoutRequestId] = useState(null);
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8001";
   const { items, total, clearCart } = useCartStore();
   const { user } = useAuthStore();
   const navigate = useNavigate();
