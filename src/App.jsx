@@ -80,8 +80,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          {/* Admin Routes */}
           <Route
             path="/admin"
             element={
