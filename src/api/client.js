@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://hardware-backend-12qj.onrender.com';
+const API_URL = 'https://hardware-backend-4.onrender.com';
 // console.log("API BASE URL:", API_URL);
 const api = axios.create({
   baseURL: API_URL,
