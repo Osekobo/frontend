@@ -45,8 +45,10 @@ const Checkout = () => {
 
   // Calculate order details
   const subtotal = total;
-  const shippingFee = subtotal > 5000 ? 0 : 250;
-  const grandTotal = subtotal + shippingFee;
+  // const shippingFee = subtotal > 5000 ? 0 : 250;
+  const shippingFee = 0;
+  // const grandTotal = subtotal + shippingFee;
+  const grandTotal = subtotal;
 
   // Debug auth on mount
   useEffect(() => {
