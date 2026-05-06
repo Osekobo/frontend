@@ -130,6 +130,42 @@ html {
   background: #555;
 }
 
+/* ========== RELATED PRODUCTS HORIZONTAL SCROLLBAR ========== */
+
+/* For smooth horizontal scrolling */
+#related-products-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-terra) var(--c-sand);
+}
+
+/* Custom scrollbar for the related products section - Webkit (Chrome, Safari, Edge) */
+#related-products-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+#related-products-scroll::-webkit-scrollbar-track {
+  background: var(--c-sand);
+  border-radius: 4px;
+}
+
+#related-products-scroll::-webkit-scrollbar-thumb {
+  background: var(--c-terra);
+  border-radius: 4px;
+}
+
+#related-products-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--c-terra-dark);
+}
+
+/* For Firefox */
+#related-products-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-terra) var(--c-sand);
+}
+
 /* ========== KIONE HARDWARE CUSTOM COLORS ========== */
 
 :root {

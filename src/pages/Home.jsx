@@ -95,8 +95,9 @@ const Home = () => {
     ? partners.slice(currentPartnerIndex, currentPartnerIndex + partnersPerView) 
     : [];
 
+  // ✅ OPTIMIZED: Fetch only 8 products for home page (faster load)
   useEffect(() => {
-    fetchProducts();
+    fetchProducts(1, 8);
   }, []);
 
   useEffect(() => {
@@ -157,12 +158,43 @@ const Home = () => {
     }
   };
 
-  const latestProducts = Array.isArray(products) ? products.slice(0, 8) : [];
+  const latestProducts = Array.isArray(products) ? products : [];
 
-  if (isLoading) {
+  // ✅ Loading Skeleton - Better UX while loading
+  if (isLoading && latestProducts.length === 0) {
     return (
-      <div className="flex justify-center items-center h-screen bg-warm">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-terra"></div>
+      <div className="min-h-screen bg-warm">
+        <div className="container mx-auto px-4 py-8">
+          {/* Hero Skeleton */}
+          <div className="animate-pulse">
+            <div className="h-[500px] md:h-[600px] bg-gray-200 rounded-lg mb-8"></div>
+            
+            {/* Why Choose Us Skeleton */}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mb-16">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="bg-white border-4 border-black shadow-hard-sm p-6">
+                  <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-full mx-auto"></div>
+                </div>
+              ))}
+            </div>
+            
+            {/* Products Skeleton */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="bg-white border-4 border-black shadow-hard-sm overflow-hidden">
+                  <div className="h-48 bg-gray-200"></div>
+                  <div className="p-3">
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2 mb-3"></div>
+                    <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -282,6 +314,8 @@ const Home = () => {
                     src={product.image_url || `https://placehold.co/400x400/D6B896/121518?text=${(product.name || 'Product').substring(0, 15)}`}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className={`absolute inset-0 bg-black/60 items-center justify-center space-x-3 transition-opacity duration-300 ${hoveredProduct === product.id ? 'md:flex' : 'md:hidden'} hidden`}>
                     <button onClick={() => handleAddToCart(product)} className="p-2 bg-terra text-white border-2 border-black"><FiShoppingCart className="w-5 h-5" /></button>
@@ -329,7 +363,7 @@ const Home = () => {
               </div>
               <p className="text-ash text-lg md:text-xl text-center italic mb-8 leading-relaxed">"{testimonials[currentTestimonial].text}"</p>
               <div className="flex flex-col items-center text-center">
-                <img src={testimonials[currentTestimonial].image} alt={testimonials[currentTestimonial].name} className="w-16 h-16 rounded-full object-cover border-4 border-terra mb-4" />
+                <img src={testimonials[currentTestimonial].image} alt={testimonials[currentTestimonial].name} className="w-16 h-16 rounded-full object-cover border-4 border-terra mb-4" loading="lazy" />
                 <h4 className="font-h text-xl font-bold text-black">{testimonials[currentTestimonial].name}</h4>
                 <p className="text-ash text-sm">{testimonials[currentTestimonial].location}</p>
                 <p className="text-ash/50 text-xs mt-1">{testimonials[currentTestimonial].date}</p>
@@ -353,7 +387,7 @@ const Home = () => {
               {visiblePartners.map((partner) => (
                 <a key={partner.id} href={partner.website} target="_blank" rel="noopener noreferrer" className="group bg-warm border-4 border-black p-6 text-center hover:-translate-y-1 transition-all duration-300 shadow-hard-sm">
                   <div className="h-20 flex items-center justify-center mb-3">
-                    <img src={partner.logo} alt={partner.name} className="max-h-12 object-contain group-hover:scale-110 transition-transform duration-300" onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/100x60?text=${partner.name}`; }} />
+                    <img src={partner.logo} alt={partner.name} className="max-h-12 object-contain group-hover:scale-110 transition-transform duration-300" loading="lazy" onError={(e) => { e.target.onerror = null; e.target.src = `https://placehold.co/100x60?text=${partner.name}`; }} />
                   </div>
                   <h3 className="font-h font-bold text-sm uppercase text-black">{partner.name}</h3>
                   <p className="text-xs text-ash mt-1">{partner.description}</p>

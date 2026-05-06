@@ -17,17 +17,19 @@ import {
   FiChevronLeft,
   FiMapPin,
   FiClock,
-  FiCheckCircle
+  FiCheckCircle,
+  FiChevronRight
 } from 'react-icons/fi';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { products, fetchProducts } = useProductStore();
+  const { products, isLoading, fetchProducts } = useProductStore();
   const { addToCart } = useCartStore();
   const { user } = useAuthStore();
 
   const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [inWishlist, setInWishlist] = useState(false);
@@ -38,6 +40,15 @@ const ProductDetail = () => {
     } else {
       const foundProduct = products.find(p => p.id === parseInt(id));
       setProduct(foundProduct);
+      
+      // Find related products (same category, exclude current product)
+      if (foundProduct && foundProduct.category) {
+        const related = products.filter(p => 
+          p.category === foundProduct.category && p.id !== foundProduct.id
+        );
+        setRelatedProducts(related);
+        console.log('Related products found:', related.length);
+      }
     }
   }, [products, id, fetchProducts]);
 
@@ -62,6 +73,11 @@ const ProductDetail = () => {
     }
   };
 
+  const handleRelatedProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const toggleWishlist = () => {
     if (!user) {
       toast.error('Please login to add to wishlist');
@@ -76,7 +92,7 @@ const ProductDetail = () => {
     }
   };
 
-  if (!product) {
+  if (isLoading || !product) {
     return (
       <div className="min-h-screen bg-warm flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-terra"></div>
@@ -86,10 +102,8 @@ const ProductDetail = () => {
 
   // Mock product images (in production, would come from backend)
   const productImages = [
-    product.image_url || `https://picsum.photos/seed/${product.id}/600/600`,
-    `https://picsum.photos/seed/${product.id}1/600/600`,
-    `https://picsum.photos/seed/${product.id}2/600/600`,
-    `https://picsum.photos/seed/${product.id}3/600/600`,
+    product.image_url || `https://placehold.co/400x400/D6B896/121518?text=${(product.name || 'Product').substring(0, 15)}`,
+    product.image_url || `https://placehold.co/400x400/D6B896/121518?text=${(product.name || 'Product').substring(0, 15)}`,
   ];
 
   // Get category display name
@@ -103,6 +117,19 @@ const ProductDetail = () => {
       general: 'General Store'
     };
     return categories[category] || category;
+  };
+
+  // Scroll related products horizontally
+  const scrollRelated = (direction) => {
+    const container = document.getElementById('related-products-scroll');
+    if (container) {
+      const scrollAmount = 300;
+      if (direction === 'left') {
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    }
   };
 
   return (
@@ -253,7 +280,7 @@ const ProductDetail = () => {
                   <button
                     onClick={handleAddToCart}
                     disabled={product.stock === 0}
-                    className="flex-1 bg-terra text-white py-3 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 flex items-center justify-center space-x-2"
+                    className="flex-1 bg-terra text-white py-3 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
                   >
                     <FiShoppingCart className="w-5 h-5" />
                     <span>{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
@@ -321,19 +348,106 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Related Products Section */}
-        <div className="mt-12">
-          <div className="text-center mb-6">
-            <h2 className="font-h text-2xl md:text-3xl font-bold text-black uppercase mb-2">You Might Also Like</h2>
-            <div className="brick-line mx-auto"></div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Add related products here - would come from backend */}
-            <div className="bg-white border-4 border-black shadow-hard-sm p-8 text-center">
-              <p className="text-ash">More products coming soon!</p>
+        {/* Related Products Section - Horizontal Scrollable */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-12">
+            <div className="text-center mb-6">
+              <h2 className="font-h text-2xl md:text-3xl font-bold text-black uppercase mb-2">You Might Also Like</h2>
+              <div className="brick-line mx-auto"></div>
+              <p className="text-ash mt-2">Products from the same category</p>
+            </div>
+            
+            <div className="relative group">
+              {/* Left Scroll Button */}
+              {relatedProducts.length > 3 && (
+                <button
+                  onClick={() => scrollRelated('left')}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border-4 border-black shadow-hard-sm p-2 hover:bg-terra hover:text-white transition-all -ml-4 hidden md:flex items-center justify-center"
+                >
+                  <FiChevronLeft className="w-6 h-6" />
+                </button>
+              )}
+              
+              {/* Horizontal Scrollable Container */}
+              <div
+                id="related-products-scroll"
+                className="flex overflow-x-auto gap-4 pb-4 scroll-smooth"
+                style={{ scrollbarWidth: 'thin', overflowX: 'auto' }}
+              >
+                {relatedProducts.map((relatedProduct) => (
+                  <div
+                    key={relatedProduct.id}
+                    onClick={() => handleRelatedProductClick(relatedProduct.id)}
+                    className="flex-shrink-0 w-64 bg-white border-4 border-black shadow-hard-sm overflow-hidden hover:-translate-y-2 transition-all duration-300 cursor-pointer group"
+                  >
+                    <div className="relative overflow-hidden h-48 border-b-4 border-black">
+                      <img
+                        src={relatedProduct.image_url || `https://placehold.co/400x400/D6B896/121518?text=${(relatedProduct.name || 'Product').substring(0, 15)}`}
+                        alt={relatedProduct.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          e.target.src = `https://placehold.co/400x400/D6B896/121518?text=${(relatedProduct.name || 'Product').substring(0, 15)}`;
+                        }}
+                      />
+                      {relatedProduct.stock < 10 && relatedProduct.stock > 0 && (
+                        <div className="absolute top-2 left-2 bg-terra text-white px-1.5 py-0.5 text-[10px] font-bold uppercase border border-black">
+                          Low Stock
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <h3 className="font-h font-bold text-sm text-black mb-1 line-clamp-1">
+                        {relatedProduct.name}
+                      </h3>
+                      <p className="text-ash text-xs mb-2 line-clamp-2">
+                        {relatedProduct.description}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        <span className="font-h font-bold text-sm text-terra">
+                          KSh {relatedProduct.price?.toLocaleString() || 0}
+                        </span>
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <FiStar
+                              key={i}
+                              className={`w-3 h-3 ${i < 4 ? 'text-yellow-500 fill-current' : 'text-gray-300'}`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Right Scroll Button */}
+              {relatedProducts.length > 3 && (
+                <button
+                  onClick={() => scrollRelated('right')}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border-4 border-black shadow-hard-sm p-2 hover:bg-terra hover:text-white transition-all -mr-4 hidden md:flex items-center justify-center"
+                >
+                  <FiChevronRight className="w-6 h-6" />
+                </button>
+              )}
             </div>
           </div>
-        </div>
+        )}
+
+        {/* If no related products */}
+        {relatedProducts.length === 0 && (
+          <div className="mt-12">
+            <div className="text-center mb-6">
+              <h2 className="font-h text-2xl md:text-3xl font-bold text-black uppercase mb-2">You Might Also Like</h2>
+              <div className="brick-line mx-auto"></div>
+            </div>
+            <div className="bg-white border-4 border-black shadow-hard-sm p-8 text-center">
+              <p className="text-ash">More products from this category coming soon!</p>
+              <Link to="/products" className="inline-block mt-4 bg-terra text-white px-6 py-2 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
+                Browse All Products
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

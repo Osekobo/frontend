@@ -6,7 +6,7 @@ import { login as loginApi, register as registerApi } from '../api/auth';
 
 const useAuthStore = create(
   persist(
-    (set) => ({
+    (set, get) => ({  // Added 'get' for accessing current state
       user: null,
       token: null,
       isLoading: false,
@@ -18,28 +18,20 @@ const useAuthStore = create(
           const response = await loginApi({ email, password });
           const { access_token } = response.data;
           const user = jwtDecode(access_token);
-          set({ token: access_token, user, isLoading: false });
+          
+          // Store both in Zustand and localStorage
+          set({ token: access_token, user, isLoading: false, error: null });
           localStorage.setItem('access_token', access_token);
-          return { success: true };
+          
+          return { success: true, user };
         } catch (error) {
           console.error('Login error details:', error);
-          let errorMessage = 'Login failed';
           
-          if (error.response) {
-            // Log the full error response for debugging
-            console.error('Error response data:', error.response.data);
-            console.error('Error status:', error.response.status);
-            
-            const data = error.response.data;
-            if (typeof data === 'string') {
-              errorMessage = data;
-            } else if (data.detail) {
-              errorMessage = data.detail;
-            } else if (data.message) {
-              errorMessage = data.message;
-            } else {
-              errorMessage = JSON.stringify(data);
-            }
+          let errorMessage = 'Login failed';
+          if (error.response?.data?.detail) {
+            errorMessage = error.response.data.detail;
+          } else if (error.response?.data?.message) {
+            errorMessage = error.response.data.message;
           } else if (error.message) {
             errorMessage = error.message;
           }
@@ -52,13 +44,13 @@ const useAuthStore = create(
       register: async (userData) => {
         set({ isLoading: true, error: null });
         try {
-          console.log('Sending registration data:', userData);
+          console.log('📝 Registering user:', { ...userData, password: '***' });
           
-          // First, register the user
+          // Register the user
           const registerResponse = await registerApi(userData);
-          console.log('Registration response:', registerResponse);
+          console.log('✅ Registration successful');
           
-          // After successful registration, automatically log them in
+          // Auto-login after registration
           const loginResponse = await loginApi({ 
             email: userData.email, 
             password: userData.password 
@@ -78,34 +70,13 @@ const useAuthStore = create(
           return { success: true, user };
           
         } catch (error) {
-          console.error('Registration error details:', error);
+          console.error('❌ Registration error:', error);
           
           let errorMessage = 'Registration failed';
-          
-          if (error.response) {
-            // Log the full error response for debugging
-            console.error('Error response data:', error.response.data);
-            console.error('Error status:', error.response.status);
-            console.error('Error headers:', error.response.headers);
-            
-            const data = error.response.data;
-            
-            // Try to extract the most helpful error message
-            if (typeof data === 'string') {
-              errorMessage = data;
-            } else if (data.detail) {
-              errorMessage = data.detail;
-            } else if (data.message) {
-              errorMessage = data.message;
-            } else if (data.errors && Array.isArray(data.errors)) {
-              errorMessage = data.errors.map(e => e.msg || e).join(', ');
-            } else {
-              errorMessage = JSON.stringify(data);
-            }
-          } else if (error.request) {
-            // Request was made but no response received
-            errorMessage = 'No response from server. Please check your connection.';
-            console.error('No response received:', error.request);
+          if (error.response?.data?.detail) {
+            errorMessage = error.response.data.detail;
+          } else if (error.response?.data?.message) {
+            errorMessage = error.response.data.message;
           } else if (error.message) {
             errorMessage = error.message;
           }
@@ -121,6 +92,31 @@ const useAuthStore = create(
       },
       
       clearError: () => set({ error: null }),
+      
+      // ✅ Helper method to check if user is logged in
+      isAuthenticated: () => {
+        const { token } = get();
+        return !!token;
+      },
+      
+      // ✅ Helper method to get user's phone number
+      getUserPhone: () => {
+        const { user } = get();
+        return user?.phone || '';
+      },
+      
+      // ✅ Helper method to check if user is admin
+      isAdmin: () => {
+        const { user } = get();
+        return user?.is_admin === true;
+      },
+      
+      // ✅ Update user info (useful after profile updates)
+      updateUser: (updates) => {
+        set((state) => ({
+          user: { ...state.user, ...updates }
+        }));
+      }
     }),
     {
       name: 'auth-storage',
@@ -129,6 +125,8 @@ const useAuthStore = create(
         user: state.user, 
         token: state.token 
       }),
+      // ✅ Optional: versioning to handle schema changes
+      version: 1,
     }
   )
 );

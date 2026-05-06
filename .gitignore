@@ -1,3 +1,5 @@
+.venv
+.env
 # Logs
 logs
 *.log
@@ -22,3 +24,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Add these to your existing .gitignore
+.cache/
+.vite/
+build/
+*.local
+.env.local

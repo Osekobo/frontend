@@ -1,14 +1,17 @@
+// Register.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
-import { FiUser, FiMail, FiLock, FiUserPlus, FiShield, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
+import { FiUser, FiMail, FiLock, FiPhone, FiUserPlus, FiShield, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const { register, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
 
@@ -16,6 +19,22 @@ const Register = () => {
   useEffect(() => {
     clearError();
   }, [clearError]);
+
+  // Validate phone number (Kenyan format)
+  const validatePhone = (phoneNum) => {
+    if (!phoneNum) {
+      setPhoneError('');
+      return true; // Phone is optional
+    }
+    // Kenyan phone number regex: starts with 0 or 254, followed by 9 digits
+    const kenyanPhoneRegex = /^(254|0)[17]\d{8}$/;
+    if (!kenyanPhoneRegex.test(phoneNum)) {
+      setPhoneError('Enter a valid Kenyan phone number (e.g., 0712345678 or 254712345678)');
+      return false;
+    }
+    setPhoneError('');
+    return true;
+  };
 
   // Validate password strength
   const validatePassword = (pass) => {
@@ -40,8 +59,13 @@ const Register = () => {
     if (!validatePassword(password)) {
       return;
     }
+    
+    // Validate phone (optional but format check)
+    if (!validatePhone(phone)) {
+      return;
+    }
 
-    const result = await register({ name, email, password });
+    const result = await register({ name, email, phone, password });
     if (result.success) {
       // Auto-login successful, redirect to home
       navigate('/');
@@ -72,6 +96,14 @@ const Register = () => {
 
   const errorMessage = formatErrorMessage(error);
 
+  // Format phone number as user types
+  const handlePhoneChange = (e) => {
+    let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    if (value.length > 12) value = value.slice(0, 12);
+    setPhone(value);
+    validatePhone(value);
+  };
+
   return (
     <div className="min-h-screen bg-warm flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
@@ -94,11 +126,7 @@ const Register = () => {
           {errorMessage && (
             <div className={`border-2 mb-4 p-4 ${errorMessage.includes('already registered') ? 'bg-yellow-50 border-yellow-500 text-yellow-700' : 'bg-red-100 border-red-500 text-red-700'}`}>
               <div className="flex items-start space-x-2">
-                {errorMessage.includes('already registered') ? (
-                  <FiAlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                ) : (
-                  <FiAlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                )}
+                <FiAlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold">
                     {errorMessage.includes('already registered') ? 'Account Exists' : 'Registration Error'}
@@ -120,7 +148,7 @@ const Register = () => {
             {/* Full Name Field */}
             <div className="mb-4">
               <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
-                Full Name
+                Full Name *
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -130,7 +158,7 @@ const Register = () => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra focus:border-transparent"
+                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
                   placeholder="Enter your full name"
                   required
                   disabled={isLoading}
@@ -141,7 +169,7 @@ const Register = () => {
             {/* Email Field */}
             <div className="mb-4">
               <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
-                Email Address
+                Email Address *
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -151,7 +179,7 @@ const Register = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra focus:border-transparent"
+                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
                   placeholder="you@example.com"
                   required
                   disabled={isLoading}
@@ -159,10 +187,40 @@ const Register = () => {
               </div>
             </div>
 
+            {/* Phone Field */}
+            <div className="mb-4">
+              <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
+                Phone Number
+                <span className="text-xs text-ash font-normal ml-1">(Optional but recommended)</span>
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FiPhone className="h-5 w-5 text-ash" />
+                </div>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={handlePhoneChange}
+                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
+                  placeholder="0712345678"
+                  disabled={isLoading}
+                />
+              </div>
+              {phoneError && (
+                <p className="text-red-500 text-xs mt-1 flex items-center">
+                  <FiAlertCircle className="w-3 h-3 mr-1" />
+                  {phoneError}
+                </p>
+              )}
+              <p className="text-ash text-xs mt-1">
+                ✓ Used for order updates and delivery notifications
+              </p>
+            </div>
+
             {/* Password Field */}
             <div className="mb-4">
               <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
-                Password
+                Password *
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -175,7 +233,7 @@ const Register = () => {
                     setPassword(e.target.value);
                     validatePassword(e.target.value);
                   }}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra focus:border-transparent"
+                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
                   placeholder="Create a password"
                   required
                   disabled={isLoading}
@@ -195,7 +253,7 @@ const Register = () => {
             {/* Confirm Password Field */}
             <div className="mb-6">
               <label className="block text-sm font-bold text-black uppercase tracking-wider mb-2">
-                Confirm Password
+                Confirm Password *
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -205,7 +263,7 @@ const Register = () => {
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra focus:border-transparent"
+                  className="w-full pl-10 pr-3 py-2 border-2 border-black focus:outline-none focus:ring-2 focus:ring-terra"
                   placeholder="Confirm your password"
                   required
                   disabled={isLoading}
@@ -229,7 +287,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-terra text-white py-3 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 flex items-center justify-center space-x-2"
+              className="w-full bg-terra text-white py-3 font-bold uppercase tracking-wider border-4 border-black shadow-hard-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
             >
               {isLoading ? (
                 <>
@@ -265,7 +323,7 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Terms and Security Note */}
+          {/* Security Note */}
           <div className="text-center text-xs text-ash">
             <p className="flex items-center justify-center space-x-1">
               <FiShield className="w-3 h-3" />

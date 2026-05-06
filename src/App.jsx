@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/Common/ProtectedRoute';
 import Home from './pages/Home';
@@ -9,7 +10,7 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
-import Account from './pages/Account';  // Add this import
+import Account from './pages/Account';
 import AddProduct from './pages/Admin/AddProduct';
 import EditProduct from './pages/Admin/EditProduct';
 import ManageProducts from './pages/Admin/ManageProducts';
@@ -17,10 +18,29 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import NewsletterSubscribers from './pages/Admin/NewsletterSubscribers';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import OrderDetail from './pages/OrderDetail';
+import CancelledOrders from './pages/Admin/CancelledOrders';
+
+// ScrollToTop component - resets scroll on every route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // Reset scroll position to top on route change
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant' // Use 'instant' to prevent smooth scrolling interference
+    });
+  }, [pathname]);
+
+  return null;
+};
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Layout>
         <Routes>
           {/* Public Routes */}
@@ -32,6 +52,8 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/order/:id" element={<OrderDetail />} />
+          <Route path="/admin/cancelled-orders" element={<CancelledOrders />} />
 
           {/* Protected User Routes */}
           <Route
