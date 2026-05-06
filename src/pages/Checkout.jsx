@@ -38,7 +38,7 @@ const Checkout = () => {
   });
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [checkoutRequestId, setCheckoutRequestId] = useState(null);
-
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8001";
   const { items, total, clearCart } = useCartStore();
   const { user } = useAuthStore();
   const navigate = useNavigate();
@@ -125,12 +125,12 @@ const Checkout = () => {
 
   const pollPaymentStatus = async (checkoutRequestId, maxAttempts = 15) => {
     let attempts = 0;
-
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8001";
     const poll = setInterval(async () => {
       attempts++;
       try {
         const response = await fetch(
-          `http://localhost:8001/mpesa/status/${checkoutRequestId}`,
+          `${API_URL}/mpesa/status/${checkoutRequestId}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -208,7 +208,7 @@ const Checkout = () => {
       console.log("Grand total:", grandTotal);
 
       // Create order
-      const orderResponse = await fetch("http://localhost:8001/orders/create", {
+      const orderResponse = await fetch(`${API_URL}/orders/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -255,21 +255,18 @@ const Checkout = () => {
         });
 
         // Initiate M-Pesa STK Push - WITH CORRECT AUTH HEADER
-        const paymentResponse = await fetch(
-          "http://localhost:8001/mpesa/stkpush",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // ← THIS WAS MISSING!
-            },
-            body: JSON.stringify({
-              amount: Math.ceil(grandTotal), // Round up to whole number
-              phone_number: formattedPhone, // Use formatted phone
-              order_id: orderId,
-            }),
+        const paymentResponse = await fetch(`${API_URL}/mpesa/stkpush`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ← THIS WAS MISSING!
           },
-        );
+          body: JSON.stringify({
+            amount: Math.ceil(grandTotal), // Round up to whole number
+            phone_number: formattedPhone, // Use formatted phone
+            order_id: orderId,
+          }),
+        });
 
         console.log("Payment response status:", paymentResponse.status);
         const paymentData = await paymentResponse.json();
